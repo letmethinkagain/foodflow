@@ -38,3 +38,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
       
+
+// 修复滚动 + 省略号逻辑
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. 左侧滚动自动生效（只要内容超出sidebar高度）
+  
+  // 2. 描述文字省略号优化
+  const descriptions = document.querySelectorAll('.desc');
+  descriptions.forEach(desc => {
+    if (desc.scrollHeight > desc.clientHeight) {
+      desc.classList.add('overflow');
+      desc.querySelector('::after').style.display = 'block';
+    }
+  });
+
+  // 3. 窗口变化时重新计算
+  window.addEventListener('resize', () => {
+    descriptions.forEach(desc => {
+      if (desc.scrollHeight > desc.clientHeight) {
+        desc.classList.add('overflow');
+        desc.querySelector('::after').style.display = 'block';
+      } else {
+        desc.classList.remove('overflow');
+        desc.querySelector('::after').style.display = 'none';
+      }
+    });
+  });
+});
