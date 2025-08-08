@@ -1,575 +1,597 @@
+/* 全局样式重置及基础设置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* 基础设置 - 以rem为单位基准（1rem = 16px） */
 html {
   font-size: 16px; /* 基础字体大小，作为rem基准 */
 }
 
-/* 全局样式重置及基础设置 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+ul{
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+}
+
+input{
+  outline: none;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.5;
+  padding-top: 4.375rem; /* 为顶部固定导航留出空间 */
+  padding-bottom: 3.75rem; /* 为底部固定导航留出空间 */
+}
+
+/* 固定导航样式 */
+.fixed-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+}
+
+.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 -0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+}
+
+/* 中间滚动内容区域 */
+.scrollable-content {
+  width: 95%;
+  margin: 0 auto;
+  overflow-y: auto;
+  height: calc(100vh - 8.125rem); /* 减去顶部和底部导航高度 */
+  -webkit-overflow-scrolling: touch; /* 平滑滚动 */
+}
+
+/* 头部样式 */
+.header-inner {
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+}
+
+.logo img {
+  width: 2.8125rem;
+  height: 2.8125rem;
+  border-radius: 50%;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin: 0 0.9375rem;
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  padding-left: 2.1875rem;
+  border: 0.0625rem solid #ddd;
+  border-radius: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: #2b2b2b;
+}
+
+.cart-login {
+  display: flex;
+  align-items: center;
+}
+
+.cart-icon {
+  display: inline-block;
+  color:#7c7c7c;
+  font-size: 1.125rem;
+  margin-right: 0.9375rem;
+  height: 2.7143rem;
+  line-height: 2.7143rem;
+  font-size: 1.4rem;
+}
+
+.login-register a {
+  color: #333;
+  font-size: 0.875rem;
+  margin: 0 0.1875rem;
+  height: 2.7143rem;
+  line-height: 2.7143rem;
+}
+
+.login-register a:hover {
+  color: #ff6b6b;
+}
+
+/* 视频区域样式 */
+.video-section {
+  width: 100%;
+  position: relative;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 40vh; /* 视频高度占视口40% */
+  overflow: hidden;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+  width: 100%;
+  padding: 0 1.25rem;
+  font-family: Anton;
+}
+
+.video-overlay h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.625rem;
+  text-shadow: 1px 1px 0 #333, 2px 2px 0 #333;
+}
+
+.video-overlay p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  text-shadow: 1px 1px 0 #333, 2px 2px 0 #333;
+}
+
+/* 导航标签样式 */
+.tab-nav {
+  background-color: white;
+  border-radius: 0.5rem;
+  margin: 0.9375rem 0;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.tab-list {
+  display: flex;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 0.75rem 0;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0.1875rem;
+  background-color: #ff6b6b;
+}
+
+/* 内容区域样式 */
+.content {
+  display: flex;
+  width: 100%;
+  max-width: 75rem; /* 限制桌面端最大宽度，适配平板/手机 */
+  margin: 0 auto 0.9375rem;
+  gap: 0.1875rem;
+  align-items: stretch; /* 强制左右区域高度一致 */
+
+}
+
+/* 左侧侧边栏 - 食谱名称列表（可滚动） */
+.sidebar {
+  width: 25%; /* 左侧宽度 */
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
+  padding: 0.9375rem;
+  display: flex;
+  flex-direction: column; /* 让内部列表可动态调整 */
+  height: 31.25rem;
+}
+
+.recipe-names {
+  /* 关键：用flex:1替代height:100%，更可靠地填充父容器剩余高度 */
+  flex: 1; 
+  overflow-y: auto;
+  padding-right: 0.3125rem; /* 预留滚动条空间 */
+  /* 去掉滚动条 */
+  scrollbar-width: none; /* Firefox */
+}
+.recipe-names::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.recipe-names li {
+  padding: 0.625rem 0.5rem;
+  margin-bottom: 0.5rem;
+  /* border-radius: 0.25rem; */
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: #999 1px dashed;
+  text-align: center;
+}
+
+.recipe-names li:nth-last-child(1){
+  border-bottom: none;
+}
+
+
+.recipe-names li:hover {
+  background-color: #f5f5f5;
+}
+
+/* 右侧主内容区 - 左侧大项，右侧上下小项 */
+.main-content {
+  width: 75%; /* 右侧宽度 */
+  display: flex;
+  gap: 0.25rem; /* 左右子项间距 */
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
+  overflow: hidden; /* 避免内部元素溢出圆角 */
+  height: 31.25rem;
+}
+
+/* 左侧大项 */
+.food-main {
+  width: 65%; /* 大项占右侧区域的65% */
+  display: flex;
+  flex-direction: column;
+}
+
+.food-item.big {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
+  padding: 0.625rem;
+  flex: 1; /* 撑满父容器高度 */
+}
+
+.food-item.big img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 11/16; /* 保持图片比例（可选） */
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 0.625rem;
+}
+
+/* 右侧上下小项容器 */
+.food-side {
+  width: 35%; /* 小项区域占右侧区域的40% */
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; /* 上下小项间距 */
+}
+
+.food-item.small {
+  flex: 1; /* 上下小项平分高度 */
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
+  padding: 0.625rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.food-item.small img {
+  width: 100%;
+  height: auto; 
+  aspect-ratio: 1/1; 
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 0.625rem;
+}
+
+/* 描述文字样式 */
+.desc0{
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.desc {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  color: #333;
+  line-height: 1.4;  
+  padding-left: 0.125rem;
+  /* 关键：多行溢出省略 */
+  /* display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; 
+  overflow: hidden;
+  text-overflow: ellipsis; */
+  max-height: 3.75rem; /* 限制容器最大高度（根据需要调整） */
+  overflow: hidden;
+  position: relative;
+  padding-right: 1em; /* 给省略号留出空间 */
+}
+/* 自定义省略号效果 */
+.desc::after {
+  content: '...';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: white; /* 用背景色覆盖最后一个字符 */
+  padding-left: 0.5em;
+  display: none; /* 仅在JS检测到溢出时显示 */
+}
+
+/* 当文字未超过容器高度时，隐藏省略号 */
+.desc:not(:hover)::after {
+  /* 只有当内容溢出时才显示省略号 */
+  display: none;
+}
+.desc:has(+ .ellipsis-trigger)::after {
+  display: block;
+}
+
+/* 滚动条美化 */
+.recipe-names::-webkit-scrollbar {
+  width: 0.375rem;
+}
+
+.recipe-names::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 0.1875rem;
+}
+
+.recipe-names::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 0.1875rem;
+}
+
+.recipe-names::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
   
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    line-height: 1.5;
-    padding-top: 4.375rem; /* 为顶部固定导航留出空间 */
-    padding-bottom: 3.75rem; /* 为底部固定导航留出空间 */
-  }
-  
-  /* 固定导航样式 */
-  .fixed-top {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 999;
-    background-color: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
-  }
-  
-  .fixed-bottom {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 999;
-    background-color: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 -0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
-  }
-  
-  /* 中间滚动内容区域 */
-  .scrollable-content {
-    width: 95%;
-    margin: 0 auto;
-    overflow-y: auto;
-    height: calc(100vh - 8.125rem); /* 减去顶部和底部导航高度 */
-    -webkit-overflow-scrolling: touch; /* 平滑滚动 */
-  }
-  
-  /* 头部样式 */
-  .header-inner {
-    width: 95%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 0;
-  }
-  
-  .logo img {
-    width: 2.8125rem;
-    height: 2.8125rem;
-    border-radius: 50%;
-  }
-  
-  .search-box {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    margin: 0 0.9375rem;
-    position: relative;
-  }
-  
-  .search-box input {
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    padding-left: 2.1875rem;
-    border: 0.0625rem solid #ddd;
-    border-radius: 1.25rem;
-    outline: none;
-    font-size: 0.875rem;
-  }
-  
-  .search-icon {
-    position: absolute;
-    left: 0.75rem;
-    color: #999;
-  }
-  
-  .cart-login {
-    display: flex;
-    align-items: center;
-  }
-  
-  .cart-icon {
-    display: inline-block;
-    color: #333;
-    font-size: 1.125rem;
-    margin-right: 0.9375rem;
-  }
-  
-  .login-register a {
-    text-decoration: none;
-    color: #333;
-    font-size: 0.875rem;
-    margin: 0 0.1875rem;
-  }
-  
-  .login-register a:hover {
-    color: #ff6b6b;
-  }
-  
-  /* 视频区域样式 */
-  .video-section {
-    width: 100%;
-    position: relative;
-  }
-  
+
+/* 广告区域样式 */
+.ad-section {
+  margin-bottom: 0.9375rem;
+}
+
+.ad-section img {
+  width: 100%;
+  height: 6.25rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+/* 轮播图区域样式 */
+.carousel-section {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 0.9375rem;
+  margin-bottom: 0.9375rem;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.carousel-btn {
+  background-color: #f5f5f5;
+  border: none;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.carousel {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  padding: 0 0.625rem;
+  scrollbar-width: none; /* 隐藏滚动条 */
+  -ms-overflow-style: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-item {
+  min-width: 7.5rem;
+  margin-right: 0.9375rem;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+/* 受喜爱食材做法区域样式 */
+.ingredient-section {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 0.9375rem;
+  margin-bottom: 0.9375rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.ingredient-section h2 {
+  font-size: 1rem;
+  margin-bottom: 0.625rem;
+  color: #333;
+}
+
+.ingredient-item {
+  display: flex;
+}
+
+.ingredient-item img {
+  width: 6.25rem;
+  height: 6.25rem;
+  object-fit: cover;
+  border-radius: 0.375rem;
+  margin-right: 0.625rem;
+}
+
+.methods {
+  flex: 1;
+}
+
+.methods p {
+  font-size: 0.875rem;
+  margin-bottom: 0.3125rem;
+}
+
+.method-pics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.method-pics img {
+  width: 45%;
+  height: 3.75rem;
+  margin-right: 0;
+  margin-bottom: 0.3125rem;
+}
+
+/* 食谱集区域样式 */
+.recipe-set {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 0.9375rem;
+  margin-bottom: 0.9375rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.recipe-set h2 {
+  font-size: 1rem;
+  margin-bottom: 0.625rem;
+  color: #333;
+}
+
+.recipe-items {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* 屏幕缩小时自动换行 */
+  gap: 0.625rem; /* 10px，增加间距避免拥挤 */
+}
+
+.recipe-item {
+  width: 30%;
+  text-align: center;
+}
+
+.recipe-item img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3/4; /* 固定宽高比，确保缩放比例一致 */
+  object-fit: cover;
+  border-radius: 0.375rem;
+  margin-bottom: 0.3125rem;
+}
+
+.recipe-item p {
+  font-size: 0.875rem;
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+/* 底部导航样式 */
+.footer-nav {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem 0;
+}
+
+.footer-nav li a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #999;
+  font-size: 0.75rem;
+}
+
+.footer-nav li a i {
+  font-size: 1.125rem;
+  margin-bottom: 0.1875rem;
+}
+
+.footer-nav li a.active {
+  color: #ff6b6b;
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
   .video-container {
-    position: relative;
-    width: 100%;
-    height: 40vh; /* 视频高度占视口40% */
-    overflow: hidden;
-  }
-  
-  .video-container video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .video-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    text-align: center;
-    text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
-    width: 100%;
-    padding: 0 1.25rem;
+    height: 30vh;
   }
   
   .video-overlay h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 0.625rem;
+    font-size: 2rem;
   }
   
-  .video-overlay p {
-    font-size: 1.1rem;
-    opacity: 0.9;
-  }
-  
-  /* 导航标签样式 */
-  .tab-nav {
-    background-color: white;
-    border-radius: 0.5rem;
-    margin: 0.9375rem 0;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
-  }
-  
-  .tab-list {
-    display: flex;
-    list-style: none;
-  }
-  
-  .tab-item {
-    flex: 1;
-    text-align: center;
-    padding: 0.75rem 0;
-    font-size: 0.9375rem;
-    cursor: pointer;
-    position: relative;
-  }
-  
-  .tab-item.active {
-    color: #ff6b6b;
-    font-weight: bold;
-  }
-  
-  .tab-item.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 0.1875rem;
-    background-color: #ff6b6b;
-  }
-  
-  /* 内容区域样式 */
-  .content {
-    display: flex;
-    width: 100%;
-    max-width: 75rem; /* 限制桌面端最大宽度，适配平板/手机 */
-    margin: 0 auto 0.9375rem;
-    gap: 0.1875rem;
-    align-items: stretch; /* 强制左右区域高度一致 */
-
-  }
-
-  /* 左侧侧边栏 - 食谱名称列表（可滚动） */
   .sidebar {
-    width: 25%; /* 左侧宽度 */
-    background-color: #fff;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
-    padding: 0.9375rem;
-    display: flex;
-    flex-direction: column; /* 让内部列表可动态调整 */
-    height: 31.25rem;
+    width: 30%;
   }
-
-  .recipe-names {
-    list-style: none;
-    /* 关键：用flex:1替代height:100%，更可靠地填充父容器剩余高度 */
-    flex: 1; 
-    overflow-y: auto;
-    padding-right: 0.3125rem; /* 预留滚动条空间 */
-    /* 去掉滚动条 */
-    scrollbar-width: none; /* Firefox */
-  }
-  .recipe-names::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
-  }
-
-  .recipe-names li {
-    padding: 0.625rem 0.5rem;
-    margin-bottom: 0.5rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .recipe-names li:hover {
-    background-color: #f5f5f5;
-  }
-
-  /* 右侧主内容区 - 左侧大项，右侧上下小项 */
+  
   .main-content {
-    width: 75%; /* 右侧宽度 */
-    display: flex;
-    gap: 0.25rem; /* 左右子项间距 */
-    background-color: #fff;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
-    overflow: hidden; /* 避免内部元素溢出圆角 */
-    height: 31.25rem;
-  }
-
-  /* 左侧大项 */
-  .food-main {
-    width: 65%; /* 大项占右侧区域的65% */
-    display: flex;
-    flex-direction: column;
-  }
-
-  .food-item.big {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
-    padding: 0.625rem;
-    flex: 1; /* 撑满父容器高度 */
-  }
-
-  .food-item.big img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 11/16; /* 保持图片比例（可选） */
-    object-fit: cover;
-    border-radius: 0.375rem;
-    margin-bottom: 0.625rem;
-  }
-
-  /* 右侧上下小项容器 */
-  .food-side {
-    width: 35%; /* 小项区域占右侧区域的40% */
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem; /* 上下小项间距 */
-  }
-
-  .food-item.small {
-    flex: 1; /* 上下小项平分高度 */
-    background-color: #fff;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
-    padding: 0.625rem;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .food-item.small img {
-    width: 100%;
-    height: auto; 
-    aspect-ratio: 1/1; 
-    object-fit: cover;
-    border-radius: 0.375rem;
-    margin-bottom: 0.625rem;
-  }
-
-  /* 描述文字样式 */
-  .desc0{
-    border-bottom: #999 1px solid;
-  }
-
-  .desc {
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-    color: #333;
-    line-height: 1.4;  
-    padding-left: 0.125rem;
-    /* 关键：多行溢出省略 */
-    /* display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3; 
-    overflow: hidden;
-    text-overflow: ellipsis; */
-    max-height: 3.75rem; /* 限制容器最大高度（根据需要调整） */
-    overflow: hidden;
-    position: relative;
-    padding-right: 1em; /* 给省略号留出空间 */
-  }
-  /* 自定义省略号效果 */
-  .desc::after {
-    content: '...';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: white; /* 用背景色覆盖最后一个字符 */
-    padding-left: 0.5em;
-    display: none; /* 仅在JS检测到溢出时显示 */
-  }
-
-  /* 当文字未超过容器高度时，隐藏省略号 */
-  .desc:not(:hover)::after {
-    /* 只有当内容溢出时才显示省略号 */
-    display: none;
-  }
-  .desc:has(+ .ellipsis-trigger)::after {
-    display: block;
-  }
-
-  /* 滚动条美化 */
-  .recipe-names::-webkit-scrollbar {
-    width: 0.375rem;
-  }
-
-  .recipe-names::-webkit-scrollbar-track {
-    background: #f0f0f0;
-    border-radius: 0.1875rem;
-  }
-
-  .recipe-names::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 0.1875rem;
-  }
-
-  .recipe-names::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
-  }
-    
-  
-  /* 广告区域样式 */
-  .ad-section {
-    margin-bottom: 0.9375rem;
+    width: 70%;
   }
   
-  .ad-section img {
-    width: 100%;
-    height: 6.25rem;
-    object-fit: cover;
-    border-radius: 0.5rem;
-  }
-  
-  /* 轮播图区域样式 */
-  .carousel-section {
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.9375rem;
-    margin-bottom: 0.9375rem;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
-  }
-  
-  .carousel-btn {
-    background-color: #f5f5f5;
-    border: none;
-    width: 1.875rem;
-    height: 1.875rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 0.875rem;
-  }
-  
-  .carousel {
-    flex: 1;
-    display: flex;
-    overflow-x: auto;
-    padding: 0 0.625rem;
-    scrollbar-width: none; /* 隐藏滚动条 */
-    -ms-overflow-style: none;
-  }
-  
-  .carousel::-webkit-scrollbar {
-    display: none;
+  .recipe-names li {
+    font-size: 0.8125rem;
+    padding: 0.625rem 0.3125rem;
   }
   
   .carousel-item {
-    min-width: 7.5rem;
-    margin-right: 0.9375rem;
+    min-width: 6.25rem;
   }
-  
-  .carousel-item img {
-    width: 100%;
-    height: 5rem;
-    object-fit: cover;
-    border-radius: 0.375rem;
-  }
-  
-  /* 受喜爱食材做法区域样式 */
-  .ingredient-section {
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.9375rem;
-    margin-bottom: 0.9375rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
-  }
-  
-  .ingredient-section h2 {
-    font-size: 1rem;
-    margin-bottom: 0.625rem;
-    color: #333;
-  }
-  
-  .ingredient-item {
-    display: flex;
-  }
-  
-  .ingredient-item img {
-    width: 6.25rem;
-    height: 6.25rem;
-    object-fit: cover;
-    border-radius: 0.375rem;
-    margin-right: 0.625rem;
-  }
-  
-  .methods {
-    flex: 1;
-  }
-  
-  .methods p {
-    font-size: 0.875rem;
-    margin-bottom: 0.3125rem;
-  }
-  
-  .method-pics {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  
-  .method-pics img {
-    width: 45%;
-    height: 3.75rem;
-    margin-right: 0;
-    margin-bottom: 0.3125rem;
-  }
-  
-  /* 食谱集区域样式 */
-  .recipe-set {
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.9375rem;
-    margin-bottom: 0.9375rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
-  }
-  
-  .recipe-set h2 {
-    font-size: 1rem;
-    margin-bottom: 0.625rem;
-    color: #333;
-  }
-  
-  .recipe-items {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap; /* 屏幕缩小时自动换行 */
-    gap: 0.625rem; /* 10px，增加间距避免拥挤 */
-  }
-  
-  .recipe-item {
-    width: 30%;
-    text-align: center;
-  }
-  
-  .recipe-item img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 3/4; /* 固定宽高比，确保缩放比例一致 */
-    object-fit: cover;
-    border-radius: 0.375rem;
-    margin-bottom: 0.3125rem;
-  }
-  
-  .recipe-item p {
-    font-size: 0.875rem;
-    color: #ff6b6b;
-    font-weight: bold;
-  }
-  
-  /* 底部导航样式 */
-  .footer-nav {
-    display: flex;
-    justify-content: space-around;
-    list-style: none;
-    padding: 0.5rem 0;
-  }
-  
-  .footer-nav li a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #999;
-    font-size: 0.75rem;
-  }
-  
-  .footer-nav li a i {
-    font-size: 1.125rem;
-    margin-bottom: 0.1875rem;
-  }
-  
-  .footer-nav li a.active {
-    color: #ff6b6b;
-  }
-  
-  /* 响应式调整 */
-  @media (max-width: 480px) {
-    .video-container {
-      height: 30vh;
-    }
+}
     
-    .video-overlay h1 {
-      font-size: 2rem;
-    }
-    
-    .sidebar {
-      width: 30%;
-    }
-    
-    .main-content {
-      width: 70%;
-    }
-    
-    .recipe-names li {
-      font-size: 0.8125rem;
-      padding: 0.625rem 0.3125rem;
-    }
-    
-    .carousel-item {
-      min-width: 6.25rem;
-    }
-  }
-      
