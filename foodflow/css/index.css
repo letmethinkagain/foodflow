@@ -199,6 +199,7 @@ html {
     margin: 0 auto 0.9375rem;
     gap: 0.1875rem;
     align-items: stretch; /* 强制左右区域高度一致 */
+
   }
 
   /* 左侧侧边栏 - 食谱名称列表（可滚动） */
