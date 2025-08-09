@@ -1,42 +1,95 @@
 // 轮播图基础功能
 document.addEventListener('DOMContentLoaded', function() {
-    // 获取轮播元素
-    const carousel = document.querySelector('.carousel');
+  const carousel = document.querySelector('.carousel');
     const prevBtn = document.querySelector('.carousel-btn.prev');
     const nextBtn = document.querySelector('.carousel-btn.next');
     const items = document.querySelectorAll('.carousel-item');
-    
-    // 轮播项宽度
-    const itemWidth = items[0].offsetWidth + 15; // 包含间距
-    
-    // 上一张按钮
-    prevBtn.addEventListener('click', function() {
-      carousel.scrollBy({
-        left: -itemWidth,
-        behavior: 'smooth'
-      });
+    let autoPlayInterval;
+    let currentIndex = 0;
+    const totalItems = items.length;
+    const visibleCount = 3;
+
+    // 复制首尾元素，实现循环
+    const cloneFirst = items[0].cloneNode(true);
+    const cloneLast = items[totalItems - 1].cloneNode(true);
+    carousel.insertBefore(cloneLast, carousel.firstChild);
+    carousel.appendChild(cloneFirst);
+
+    // 计算单个项目宽度（包含间距）
+    let itemWidthWithMargin;
+    function calculateItemWidth() {
+      itemWidthWithMargin = document.querySelector('.carousel-item').offsetWidth;
+    }
+    window.addEventListener('resize', calculateItemWidth);
+    calculateItemWidth();
+
+    // 自动轮播函数
+    function autoPlay() {
+      autoPlayInterval = setInterval(() => {
+        nextSlide();
+      }, 3000);
+    }
+
+    // 切换到下一张
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % totalItems;
+      const scrollPosition = (currentIndex + 1) * itemWidthWithMargin; // 考虑复制的元素
+      if (scrollPosition > (totalItems + 1) * itemWidthWithMargin) {
+        // 滚动到末尾后跳回开头
+        carousel.scrollTo({
+          left: itemWidthWithMargin,
+          behavior: 'instant'
+        });
+        currentIndex = 0;
+      } else {
+        carousel.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    // 切换到上一张
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+      const scrollPosition = (currentIndex + 1) * itemWidthWithMargin;
+      if (scrollPosition < itemWidthWithMargin) {
+        // 滚动到开头后跳回末尾
+        carousel.scrollTo({
+          left: totalItems * itemWidthWithMargin,
+          behavior: 'instant'
+        });
+        currentIndex = totalItems - 1;
+      } else {
+        carousel.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    // 绑定事件
+    prevBtn.addEventListener('click', () => {
+      clearInterval(autoPlayInterval);
+      prevSlide();
+      autoPlay();
     });
-    
-    // 下一张按钮
-    nextBtn.addEventListener('click', function() {
-      carousel.scrollBy({
-        left: itemWidth,
-        behavior: 'smooth'
-      });
+
+    nextBtn.addEventListener('click', () => {
+      clearInterval(autoPlayInterval);
+      nextSlide();
+      autoPlay();
     });
-    
-    // 标签切换功能
-    const tabItems = document.querySelectorAll('.tab-item');
-    tabItems.forEach(tab => {
-      tab.addEventListener('click', function() {
-        // 移除所有激活状态
-        tabItems.forEach(t => t.classList.remove('active'));
-        // 添加当前激活状态
-        this.classList.add('active');
-        // 这里可以添加切换内容的逻辑
-      });
+
+    // 鼠标悬停时停止自动轮播
+    carousel.addEventListener('mouseenter', () => {
+      clearInterval(autoPlayInterval);
     });
-  });
+    carousel.addEventListener('mouseleave', autoPlay);
+
+    // 初始化自动轮播
+    autoPlay();
+});
       
 
 // 修复滚动 + 省略号逻辑

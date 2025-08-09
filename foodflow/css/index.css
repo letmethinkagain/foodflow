@@ -412,6 +412,11 @@ body {
   display: flex;
   align-items: center;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+  max-width: 1200px;
+  width: 100%; /* 确保宽度占满容器 */
+  aspect-ratio: 2/1; /* 设置宽高比为2:1 */
+  margin: 0 auto;
+  position: relative;
 }
 
 .carousel-btn {
@@ -425,6 +430,16 @@ body {
   justify-content: center;
   cursor: pointer;
   font-size: 0.875rem;
+  z-index: 10;
+  position: absolute;
+}
+
+.carousel-btn.prev {
+  left: 0.5rem;
+}
+
+.carousel-btn.next {
+  right: 0.5rem;
 }
 
 .carousel {
@@ -432,8 +447,10 @@ body {
   display: flex;
   overflow-x: auto;
   padding: 0 0.625rem;
-  scrollbar-width: none; /* 隐藏滚动条 */
+  scrollbar-width: none;
   -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+  height: 100%; /* 高度占满父容器 */
 }
 
 .carousel::-webkit-scrollbar {
@@ -441,15 +458,25 @@ body {
 }
 
 .carousel-item {
-  min-width: 7.5rem;
+  flex-shrink: 0;
   margin-right: 0.9375rem;
+  scroll-snap-align: start;
+  position: relative;
+  width: calc((100% - 2.5rem) / 3); /* 一屏显示3张，计算每张宽度，减去左右内边距和间距 */
+  height: 100%; /* 高度占满父容器 */
 }
 
 .carousel-item img {
   width: 100%;
-  height: 5rem;
+  height: 100%;
   object-fit: cover;
   border-radius: 0.375rem;
+}
+
+.carousel-section,
+.carousel,
+.carousel-item {
+  overflow-y: hidden; /* 强制隐藏垂直滚动 */
 }
 
 /* 受喜爱食材做法区域样式 */
@@ -457,7 +484,7 @@ body {
   background-color: white;
   border-radius: 0.5rem;
   padding: 0.9375rem;
-  margin-bottom: 0.9375rem;
+  margin: 0.9375rem 0;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
 }
 
@@ -469,36 +496,47 @@ body {
 
 .ingredient-item {
   display: flex;
+  /* 让三个部分平分宽度 */
+  justify-content: space-between; 
 }
 
-.ingredient-item img {
-  width: 6.25rem;
-  height: 6.25rem;
-  object-fit: cover;
-  border-radius: 0.375rem;
-  margin-right: 0.625rem;
-}
-
-.methods {
-  flex: 1;
-}
-
-.methods p {
-  font-size: 0.875rem;
-  margin-bottom: 0.3125rem;
-}
-
-.method-pics {
+/* 左、中、右三部分通用样式 */
+.left-part,
+.middle-part,
+.right-part {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: space-between;
 }
 
-.method-pics img {
-  width: 45%;
-  height: 3.75rem;
-  margin-right: 0;
+.left-part{
+  flex:0 0 35%; /*留一点间隔避免贴合 */
+}
+.middle-part,.right-part{
+  flex: 0 0 30%;
+}
+
+/* 左侧食材图片容器内图片样式 */
+.left-part img {
+  width: 100%;
+  height: auto; /* 保持图片原始比例 */
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+/* 中间、右侧做法图片容器内图片样式 */
+.middle-part img,
+.right-part img {
+  width: 100%;
+  height: auto; /* 保持图片原始比例 */
+  object-fit: cover;
+  border-radius: 0.375rem;
   margin-bottom: 0.3125rem;
+}
+/* 去除最后一张图片的下边距，避免底部多余空白 */
+.middle-part img:last-child,
+.right-part img:last-child {
+  margin-bottom: 0;
 }
 
 /* 食谱集区域样式 */
