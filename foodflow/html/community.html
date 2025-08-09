@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 引入外部 CSS 样式文件 -->
+  <link rel="stylesheet" href="../css/community.css">
+  <title>社区 - FOODFLOW</title>
+</head>
+
+<body>
+  <!-- 头部导航区域 -->
+  <header class="header">
+    <div class="logo">LOGO</div>
+    <div class="search-box">
+      <input type="text" placeholder="搜索">
+      <button class="search-btn">搜索图标</button>
+    </div>
+    <div class="header-icons">
+      <!-- 登录状态显示：这里通过给 body 添加不同 class 模拟登录状态，实际可结合 JS 判断 -->
+      <!-- 未登录时显示登录注册，登录后显示头像 -->
+      <span class="cart-icon">购物车图标</span>
+      <span class="auth-btns" id="authBtns">
+        <a href="login.html">登录</a>
+        <a href="register.html">注册</a>
+      </span>
+      <span class="avatar" id="avatar" style="display: none;">头像</span>
+    </div>
+  </header>
+
+  <!-- 主体内容区域 -->
+  <main class="main-content">
+    <!-- 动态列表 -->
+    <div class="post-list">
+      <div class="post-item">
+        <div class="post-img">图片</div>
+        <div class="post-info">
+          <h3 class="post-title">标题</h3>
+          <div class="post-meta">
+            <span class="user-name">名字</span>
+            <span class="like-count">☆999</span>
+          </div>
+        </div>
+      </div>
+      <div class="post-item">
+        <div class="post-img">图片</div>
+        <div class="post-info">
+          <h3 class="post-title">标题</h3>
+          <div class="post-meta">
+            <span class="user-name">名字</span>
+            <span class="like-count">☆999</span>
+          </div>
+        </div>
+      </div>
+      <div class="post-item">
+        <div class="post-img">图片</div>
+        <div class="post-info">
+          <h3 class="post-title">标题</h3>
+          <div class="post-meta">
+            <span class="user-name">名字</span>
+            <span class="like-count">☆999</span>
+          </div>
+        </div>
+      </div>
+      <div class="post-item">
+        <div class="post-img">图片</div>
+        <div class="post-info">
+          <h3 class="post-title">标题</h3>
+          <div class="post-meta">
+            <span class="user-name">名字</span>
+            <span class="like-count">☆999</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 未登录弹窗（默认隐藏，可结合 JS 控制显示） -->
+    <div class="login-popup" id="loginPopup">
+      <div class="popup-content">
+        <p>您还未登录 请先登录</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部导航栏 -->
+  <footer class="bottom-nav">
+    <a href="index.html" class="nav-item">首页</a>
+    <a href="community.html" class="nav-item active">社区</a>
+    <a href="message.html" class="nav-item">消息</a>
+    <a href="mine.html" class="nav-item">我的</a>
+  </footer>
+
+  <!-- 引入基础 JS（后续可补充交互逻辑） -->
+  <script src="js/common.js"></script>
+</body>
+
+</html>

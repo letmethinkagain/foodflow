@@ -1,0 +1,70 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.h1{
+    font-size: 2rem;
+}
+.bt{
+    margin-top: 32px;
+}
+.agree{
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+    color: rgb(55 65 81 / var(--tw-text-opacity, 1));
+}
+.agree label{
+    margin-left: 0.3125rem;
+}
+
+.mt{
+    padding: 0.4375rem 0 0.875rem 0;
+    border-bottom: #999 1px dashed;
+}
+.extra{
+    padding: 0.9375rem 0;
+}
+.third-party {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: rgb(55 65 81 / var(--tw-text-opacity, 1));
+}
+
+.third-party .up{
+    display: flex;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.third-party .down{
+    display: flex;
+    justify-content: center;
+}
+
+
+.third-party a {
+    color: #2563eb;
+    text-decoration: none;
+    margin-right: 1rem;
+}
+
+.third-party a:nth-last-child(1){
+    margin-right: 0;
+}
+
+.third-party a:hover {
+    text-decoration: underline; 
+}
+
+.signature {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 1.25rem;
+}  

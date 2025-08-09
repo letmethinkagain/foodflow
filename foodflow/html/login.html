@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>用户登录</title>
+    <title>FOODFLOW - 用户登录</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/common.css">
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-lg w-full max-w-sm p-6 md:p-8">
         <div class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">用户登录</h2>
+            <h1 class="h1 font-bold text-gray-800">FOOD FLOW</h1>
+            <h2 class="text-2xl text-gray-800 h2">登录</h2>
             <p class="text-gray-500 mt-1">请输入账号密码登录</p>
         </div>
 
@@ -35,14 +37,32 @@
                 </div>
             </div>
 
-            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
-                登录
-            </button>
+            
         </form>
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 font-medium bt">
+            登录
+        </button>
+        <div class="agree">
+            <input type="checkbox" id="agree">
+            <label for="agree">我已同意《服务协议》《隐私政策》《儿童隐私政策》</label>
+        </div>
 
-        <div class="mt-4 text-center">
+        <div class="mt text-center">
             <a href="register.html" class="text-blue-600 hover:text-blue-800 text-sm">还没有账号？去注册</a>
         </div>
+
+        <!-- 第三方登录 & 辅助区域 -->
+        <div class="extra">
+            <div class="third-party">
+                <div class="up"> <span>使用第三方账号登录：</span></div>
+                <div class="down">
+                    ※<a href="#">邮箱</a> ※<a href="#">QQ</a> ※<a href="#">微信</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部签名（设计图要求） -->
+        <div class="signature">Judy & blue</div>
     </div>
 
     <script src="../js/common.js"></script>

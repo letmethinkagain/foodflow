@@ -3,18 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>用户注册</title>
+    <title>FOODFLOW - 用户注册</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/common.css">
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-lg w-full max-w-sm p-6 md:p-8">
         <div class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">用户注册</h2>
+            <h1 class="h1 font-bold text-gray-800">FOOD FLOW</h1>
+            <h2 class="text-2xl text-gray-800 h2">注册</h2>
             <p class="text-gray-500 mt-1">请创建账号密码</p>
         </div>
 
         <form id="registerForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">手机号</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                        <i class="fa fa-user-plus"></i>
+                    </span>
+                    <input type="tel" id="phone" class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="请输入手机号" required>
+                </div>
+            </div>
+
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">账号</label>
                 <div class="relative">
@@ -36,14 +48,42 @@
                 <p class="text-xs text-gray-500 mt-1">密码长度不能少于6位</p>
             </div>
 
-            <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-200 font-medium">
-                注册
-            </button>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">确认密码</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                    <input type="password" id="confirmPwd" class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="请再次确认密码" required>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">密码长度不能少于6位</p>
+            </div>
+            
         </form>
+        <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-200 font-medium bt">
+            注册
+        </button>
+        <div class="agree">
+            <input type="checkbox" id="agree">
+            <label for="agree">我已同意《服务协议》《隐私政策》《儿童隐私政策》</label>
+        </div>
 
-        <div class="mt-4 text-center">
+        <div class="mt text-center">
             <a href="login.html" class="text-blue-600 hover:text-blue-800 text-sm">已有账号？去登录</a>
         </div>
+        
+        <!-- 第三方登录 & 辅助区域 -->
+        <div class="extra">
+            <div class="third-party">
+                <div class="up"> <span>使用第三方账号注册：</span></div>
+                <div class="down">
+                    ※<a href="#">邮箱</a> ※<a href="#">QQ</a> ※<a href="#">微信</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部签名（设计图要求） -->
+        <div class="signature">Judy & blue</div>
     </div>
 
     <script src="../js/common.js"></script>
