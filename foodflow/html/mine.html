@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>我的 - FOOD FLOW</title>
+    <link rel="stylesheet" href="../css/hangf.css" />
+    <link rel="stylesheet" href="../css/mine.css" />
+    <!-- <link rel="stylesheet" href="css/normalize.css"> -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 顶部固定导航 -->
+    <header class="header fixed-top">
+      <div class="header-inner">
+        <div class="logo">
+          <img src="../img/logo.png" alt="LOGO" />
+        </div>
+        <div class="search-box">
+          <input type="text" placeholder="搜索" />
+          <span class="search-icon"><i class="fa fa-search"></i></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 中间滚动内容区域 -->
+    <main class="scrollable-content">
+      <!-- 用户信息及功能区 -->
+      <section class="user-section">
+        <div class="user-info">
+          <div class="avatar">
+            <img src="../img/carousel1.png" alt="头像" />
+          </div>
+          <div class="user-text">
+            <p class="username">用户名</p>
+            <p class="login-tip">请先登录</p>
+          </div>
+        </div>
+        <div class="user-functions">
+          <button class="func-item" data-type="history">
+            <i class="fa fa-clock-o"></i>
+            <span>历史记录</span>
+          </button>
+          <button class="func-item" data-type="favorites">
+            <i class="fa fa-star"></i>
+            <span>我的收藏</span>
+          </button>
+          <button class="func-item" data-type="cart">
+            <i class="fa fa-shopping-cart"></i>
+            <span>购物车</span>
+          </button>
+          <button class="func-item" data-type="recipes">
+            <i class="fa fa-book"></i>
+            <span>我的食谱</span>
+          </button>
+        </div>
+        <div class="content-display" id="contentDisplay">
+          <!-- 内容将通过JS动态加载到这里 -->
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部固定导航 -->
+    <footer class="footer fixed-bottom">
+      <ul class="footer-nav">
+        <li>
+          <a href="index.html"><i class="fa fa-home"></i> 首页</a>
+        </li>
+        <li>
+          <a href="community.html"><i class="fa fa-comments"></i> 社区</a>
+        </li>
+        <li>
+          <a href="message.html"><i class="fa fa-envelope"></i> 消息</a>
+        </li>
+        <li>
+          <a href="mine.html" class="active"><i class="fa fa-user"></i> 我的</a>
+        </li>
+      </ul>
+    </footer>
+
+    <script src="../js/mine.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/server.js"></script>
+  </body>
+</html>

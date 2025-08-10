@@ -1,0 +1,148 @@
+/* 全局样式重置及基础设置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 基础设置 - 以rem为单位基准（1rem = 16px） */
+html {
+  font-size: 16px; /* 基础字体大小，作为rem基准 */
+}
+/* 媒体查询：小屏幕（手机）缩小基础字体 */
+@media (max-width: 480px) {
+  html {
+    font-size: 14px; /* 手机端字体更小 */
+  }
+}
+@media (min-width: 700px) {
+  html {
+    font-size: 16px; /* 桌面端字体更大 */
+  }
+}
+@media (min-width: 1000px) {
+  html {
+    font-size: 18px; /* 桌面端字体更大 */
+  }
+}
+
+/* 媒体查询：超大屏幕（桌面）放大基础字体 */
+@media (min-width: 1200px) {
+  html {
+    font-size: 20px; /* 桌面端字体更大 */
+  }
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+input {
+  outline: none;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.5;
+  padding-top: 4.375rem; /* 为顶部固定导航留出空间 */
+  padding-bottom: 3.75rem; /* 为底部固定导航留出空间 */
+}
+
+/* 固定导航样式 */
+.fixed-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+}
+
+.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 -0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+}
+
+/* 中间滚动内容区域 */
+.scrollable-content {
+  width: 95%;
+  margin: 0 auto;
+  overflow-y: auto;
+  height: calc(100vh - 8.125rem); /* 减去顶部和底部导航高度 */
+  -webkit-overflow-scrolling: touch; /* 平滑滚动 */
+}
+
+/* 头部样式 */
+.header-inner {
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+}
+
+.logo img {
+  width: 2.8125rem;
+  height: 2.8125rem;
+  border-radius: 50%;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin: 0 0.9375rem;
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  padding-left: 2.1875rem;
+  border: 0.0625rem solid #ddd;
+  border-radius: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: #2b2b2b;
+}
+
+/* 底部导航样式 */
+.footer-nav {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem 0;
+}
+
+.footer-nav li a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #999;
+  font-size: 0.75rem;
+}
+
+.footer-nav li a i {
+  font-size: 1.125rem;
+  margin-bottom: 0.1875rem;
+}
+
+.footer-nav li a.active {
+  color: #ff6b6b;
+}
