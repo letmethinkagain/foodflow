@@ -123,6 +123,33 @@ body {
   color: #2b2b2b;
 }
 
+.cart-login {
+  display: flex;
+  align-items: center;
+}
+
+.cart-icon {
+  display: inline-block;
+  color: #7c7c7c;
+  font-size: 1.125rem;
+  margin-right: 0.9375rem;
+  height: 2.7143rem;
+  line-height: 2.7143rem;
+  font-size: 1.4rem;
+}
+
+.login-register a {
+  color: #333;
+  font-size: 0.875rem;
+  margin: 0 0.1875rem;
+  height: 2.7143rem;
+  line-height: 2.7143rem;
+}
+
+.login-register a:hover {
+  color: #ff6b6b;
+}
+
 /* 底部导航样式 */
 .footer-nav {
   display: flex;

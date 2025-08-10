@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 引入外部 CSS 样式文件，这里假设 CSS 文件名为 message.css，和当前 HTML 文件同级目录 -->
+  <title>消息 - FOODFLOW</title>
+  <link rel="stylesheet" href="../css/hangf.css">
+  <link rel="stylesheet" href="../css/message.css"> 
+  <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+</head>
+
+<body>
+  <!-- 顶部固定导航 -->
+  <header class="header fixed-top">
+    <div class="header-inner">
+      <div class="logo">
+        <img src="../img/logo.png" alt="LOGO" />
+      </div>
+      <div class="search-box">
+        <input type="text" placeholder="搜索" />
+        <span class="search-icon"><i class="fa fa-search"></i></span>
+      </div>
+      <div class="cart-login">
+        <a href="#" class="cart-icon"><i class="fa fa-shopping-cart"></i></a>
+        <div class="login-register">
+          <a href="login.html">登录</a><span>|</span
+          ><a href="register.html">注册</a>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- 功能按钮区域 -->
+  <section class="func-btns">
+    <button class="btn">
+      <img src="star-icon.png" alt="@"> <!-- 实际应替换为真实图标路径，这里只是示例 -->
+      <span>收藏</span>
+    </button>
+    <button class="btn">
+      <img src="user-add-icon.png" alt="@">
+      <span>新增关注</span>
+    </button>
+    <button class="btn">
+      <img src="bubble-icon.png" alt="@">
+      <span>评论</span>
+    </button>
+    <button class="btn">
+      <img src="order-icon.png" alt="@">
+      <span>订单</span>
+    </button>
+  </section>
+  <!-- 消息列表区域 -->
+  <section class="message-list">
+    <div class="message-item">
+      <img src="avatar-icon.png" alt="头像" class="item-avatar">
+      <div class="item-info">
+        <span class="item-name">名字</span>
+        <p class="item-msg">消息消息消息消息</p>
+      </div>
+    </div>
+    <div class="message-item">
+      <img src="avatar-icon.png" alt="头像" class="item-avatar">
+      <div class="item-info">
+        <span class="item-name">名字</span>
+        <p class="item-msg">消息消息消息消息</p>
+      </div>
+    </div>
+    <div class="message-item">
+      <img src="avatar-icon.png" alt="头像" class="item-avatar">
+      <div class="item-info">
+        <span class="item-name">名字</span>
+        <p class="item-msg">消息消息消息消息</p>
+      </div>
+    </div>
+    <div class="message-item">
+      <img src="avatar-icon.png" alt="头像" class="item-avatar">
+      <div class="item-info">
+        <span class="item-name">名字</span>
+        <p class="item-msg">消息消息消息消息</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 底部固定导航 -->
+  <footer class="footer fixed-bottom">
+    <ul class="footer-nav">
+      <li>
+        <a href="index.html"
+          ><i class="fa fa-home"></i> 首页</a
+        >
+      </li>
+      <li>
+        <a href="community.html"><i class="fa fa-comments"></i> 社区</a>
+      </li>
+      <li>
+        <a href="message.html" class="active"><i class="fa fa-envelope"></i> 消息</a>
+      </li>
+      <li>
+        <a href="mine.html"><i class="fa fa-user"></i> 我的</a>
+      </li>
+    </ul>
+  </footer>
+</body>
+
+</html>

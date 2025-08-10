@@ -1,0 +1,70 @@
+  /* 功能按钮区域样式 */
+.func-btns {
+    display: flex;
+    width: 95%;
+    height: 150px;
+    justify-content: space-around;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    background-color: white;
+    border-radius: 0.5rem;
+    margin: 0.9375rem auto;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+  
+.btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 20%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+}
+  
+.btn img {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 5px;
+}
+  
+  /* 消息列表区域样式 */
+.message-list {
+    padding: 15px;
+    width: 95%;
+    background-color: white;
+    border-radius: 0.5rem;
+    margin: 0.9375rem auto;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+  
+.message-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+  
+.item-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+  
+.item-info {
+    display: flex;
+    flex-direction: column;
+}
+  
+.item-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+  
+.item-msg {
+    font-size: 14px;
+    color: #666;
+}
