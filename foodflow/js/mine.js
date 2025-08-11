@@ -26,14 +26,14 @@ const mockData = {
       img: "../img/随园食单40_6.jpg",
       title: "随园食单",
       author: "袁枚",
-      price: "40.6元",
+      price: "40.6",
     },
     {
       id: 2,
       img: "book2.jpg",
       title: "食谱书2",
       author: "作者B",
-      price: "39.9元",
+      price: "30.6",
     },
     // 可继续添加更多
   ],
@@ -99,9 +99,22 @@ function renderContent(type) {
     const list = document.createElement("div");
     list.classList.add("item-list");
 
+    // 新增：存储购物车数据（用于计算总价）
+    const cartData = []; 
+
     data.forEach((item) => {
       const itemElem = document.createElement("div");
       itemElem.classList.add("item", "cart-item"); // 关键：加上 cart-item 类名
+
+      // 选择按钮
+      const checkBox = document.createElement('input');
+      checkBox.type = 'checkbox';
+      checkBox.classList.add('cart-checkbox');
+      checkBox.addEventListener('change', () => {
+        const cartItem = cartData.find(c => c.id === item.id);
+        if (cartItem) cartItem.checked = checkBox.checked;
+        calculateTotal(cartData); // 选中状态变化时重新计算总价
+      });
 
       // 1. 图片
       const img = document.createElement("img");
@@ -109,7 +122,7 @@ function renderContent(type) {
       img.alt = item.title;
       img.classList.add("item-img");
 
-      // 2. 文字内容区域：书名 + 作者/价格
+      // 2. 文字内容区域：书名 + 作者/价格 + 数量调整
       const info = document.createElement("div");
       info.classList.add("item-info");
 
@@ -118,25 +131,101 @@ function renderContent(type) {
       title.classList.add("item-title");
       title.textContent = item.title;
 
-      // 2.2 作者 + 价格
+
+      // 2.2 作者 + 价格 + 数量调整
       const desc = document.createElement("div");
       desc.classList.add("item-desc");
-      desc.innerHTML = `
-            <span class="author">${item.author}</span>
-            <span class="price">${item.price}</span>
-          `;
+      // 先构造价格和数量调整的结构
+      const priceSpan = document.createElement('span');
+      priceSpan.classList.add('price');
+      priceSpan.innerHTML = `<i class="yuan">¥</i>${item.price}`;
 
+      const quantityWrapper = document.createElement('div');
+      quantityWrapper.classList.add('quantity-wrapper');
+
+      const minusBtn = document.createElement('button');
+      minusBtn.classList.add('quantity-btn');
+      minusBtn.textContent = '-';
+      minusBtn.addEventListener('click', () => adjustQuantity(item, -1, itemElem, cartData));
+
+      const quantityInput = document.createElement('input');
+      quantityInput.classList.add('quantity-input');
+      quantityInput.type = 'number';
+      quantityInput.value = 1; 
+      quantityInput.addEventListener('input', (e) => adjustQuantity(item, 0, itemElem, cartData, e.target.value));
+
+      const plusBtn = document.createElement('button');
+      plusBtn.classList.add('quantity-btn');
+      plusBtn.textContent = '+';
+      plusBtn.addEventListener('click', () => adjustQuantity(item, 1, itemElem, cartData));
+
+      quantityWrapper.append(minusBtn, quantityInput, plusBtn);
+
+      // 核心修改：把「数量」和「价格」换位置，并包裹到右侧容器
+      const rightContainer = document.createElement('span');
+      rightContainer.style.display = 'flex';
+      rightContainer.style.alignItems = 'center';
+      rightContainer.style.gap = '0.5rem'; // 数量和价格的间距
+      
+      rightContainer.append(quantityWrapper, priceSpan); // 数量在前，价格在后
+      desc.append(document.createTextNode(item.author), rightContainer); // 作者在左，数量价格在右
+      
       // 组装文字区域
       info.appendChild(title);
       info.appendChild(desc);
 
-      // 组装单项
-      itemElem.appendChild(img);
-      itemElem.appendChild(info);
-      list.appendChild(itemElem);
-    });
+      // 3. 组装单项并存储数据
+      itemElem.append(checkBox, img, info);
+      list.append(itemElem);
 
-    contentDisplay.appendChild(list);
+      // 初始化购物车数据（含价格、数量）
+      cartData.push({
+        id: item.id,
+        price: parseFloat(item.price),
+        quantity: 1,
+        checked: false, // 默认未选中
+        title: item.title, // 关键：加入 title 字段！
+      });
+      });
+
+      // 4. 新增：结算栏
+      const checkoutBar = document.createElement('div');
+      checkoutBar.classList.add('checkout-bar');
+
+      const selectAllWrapper = document.createElement('div');
+      selectAllWrapper.classList.add('select-all-wrapper');
+
+      const selectAllInput = document.createElement('input');
+      selectAllInput.type = 'checkbox';
+      selectAllInput.id = 'selectAll';
+      selectAllInput.addEventListener('change', () => toggleSelectAll(cartData, selectAllInput.checked));
+
+      const selectAllLabel = document.createElement('label');
+      selectAllLabel.setAttribute('for', 'selectAll');
+      selectAllLabel.textContent = '全选';
+
+      selectAllWrapper.append(selectAllInput, selectAllLabel);
+
+      const totalWrapper = document.createElement('div');
+      totalWrapper.classList.add('total-wrapper');
+
+      const totalText = document.createElement('span');
+      totalText.id = 'totalPrice';
+      totalText.textContent = `合计: ¥0`;
+
+      const checkoutBtn = document.createElement('button');
+      checkoutBtn.classList.add('checkout-btn');
+      checkoutBtn.textContent = '结算';
+      checkoutBtn.addEventListener('click', () => checkout(cartData));
+
+      totalWrapper.append(totalText, checkoutBtn);
+      checkoutBar.append(selectAllWrapper, totalWrapper);
+
+      // 5. 渲染购物车列表 + 结算栏
+      contentDisplay.append(list, checkoutBar);
+
+      // 初始化总价计算
+      calculateTotal(cartData);
   } else if (type === "recipes") {
     const grid = document.createElement("div");
     grid.classList.add("recipes-grid");
@@ -194,3 +283,123 @@ funcIcons.forEach((icon) => {
     });
   });
 });
+
+
+// 数量调整逻辑（完整版本）
+function adjustQuantity(item, delta, itemElem, cartData, customValue) {
+  // 1. 查找当前操作的商品数据
+  const cartItem = cartData.find(c => c.id === item.id);
+  if (!cartItem) return;
+
+  // 2. 处理数量变更（区分手动输入和按钮加减）
+  let newQuantity;
+  if (customValue !== undefined) {
+    // 手动输入时的校验
+    newQuantity = parseInt(customValue, 10);
+    // 防止非数字、负数和0
+    newQuantity = isNaN(newQuantity) ? 1 : Math.max(1, newQuantity);
+  } else {
+    // 按钮加减时的计算
+    newQuantity = cartItem.quantity + delta;
+    // 确保数量不小于1
+    newQuantity = Math.max(1, newQuantity);
+  }
+
+  // 3. 更新数据和DOM
+  cartItem.quantity = newQuantity;
+  const input = itemElem.querySelector('.quantity-input');
+  if (input) {
+    input.value = newQuantity; // 同步输入框显示
+  }
+
+  // 4. 如果商品已选中，实时更新总价
+  if (cartItem.checked) {
+    calculateTotal(cartData);
+  }
+}
+
+// 全选逻辑（完整版本）
+function toggleSelectAll(cartData, isChecked) {
+  // 1. 更新所有商品的选中状态
+  cartData.forEach(item => {
+    item.checked = isChecked;
+  });
+
+  // 2. 同步更新DOM中的复选框
+  const checkboxes = document.querySelectorAll('.cart-checkbox');
+  checkboxes.forEach((checkbox, index) => {
+    // 防止索引越界
+    if (index < cartData.length) {
+      checkbox.checked = cartData[index].checked;
+    }
+  });
+
+  // 3. 重新计算总价
+  calculateTotal(cartData);
+}
+
+// 总价计算逻辑（完整版本）
+function calculateTotal(cartData) {
+  // 1. 计算所有选中商品的总价
+  const total = cartData.reduce((sum, item) => {
+    if (item.checked) {
+      return sum + (item.price * item.quantity);
+    }
+    return sum;
+  }, 0);
+
+  // 2. 格式化总价为两位小数
+  const formattedTotal = total.toFixed(2);
+
+  // 3. 更新DOM显示
+  const totalElement = document.getElementById('totalPrice');
+  if (totalElement) {
+    totalElement.textContent = `合计: ¥${formattedTotal}`;
+  }
+
+  // 4. 同步更新全选按钮状态（当所有商品都选中时自动勾选全选）
+  const allChecked = cartData.every(item => item.checked);
+  const selectAllInput = document.getElementById('selectAll');
+  if (selectAllInput) {
+    // 避免触发不必要的change事件
+    selectAllInput.checked = allChecked;
+  }
+
+  return total; // 方便其他地方调用时获取总价
+}
+
+// 结算逻辑（增强版本）
+function checkout(cartData) {
+  // 1. 筛选选中的商品
+  const selectedItems = cartData.filter(item => item.checked);
+  if (selectedItems.length === 0) {
+    alert('请选择至少一件商品！');
+    return;
+  }
+
+ // 2. 生成结算信息（关键：用 item.title 获取商品名称）
+ const orderDetails = selectedItems.map(item => {
+  return `${item.title} x ${item.quantity} 单价: ¥${item.price.toFixed(2)}`;
+}).join('\n');
+
+// 3. 计算总计金额
+const total = selectedItems.reduce((sum, item) => {
+  return sum + (item.price * item.quantity);
+}, 0);
+
+  // 4. 显示结算结果
+  alert(`结算成功！\n\n${orderDetails}\n\n总计: ¥${total.toFixed(2)}`);
+  
+  // 5. 可选：清空已结算商品
+  // clearSelectedItems(cartData);
+}
+
+// 可选：清空已结算商品的辅助函数
+function clearSelectedItems(cartData) {
+  // 过滤掉已选中的商品
+  const remainingItems = cartData.filter(item => !item.checked);
+  
+  // 更新购物车数据（如果需要持久化存储，这里可以添加localStorage逻辑）
+  // 然后重新渲染购物车
+  renderContent('cart');
+}
