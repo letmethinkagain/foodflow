@@ -1,14 +1,37 @@
+body,html{
+  overflow: hidden; /* 禁止默认滚动 */
+}
+
 /* 主体内容样式 */
 .main-content {
-  width:100%;
+  width:95%;
   height: 100%;
+  margin: 0 auto;
   padding: 0.9375rem;
   display: flex;
+  flex-direction: column;
   gap: 0.25rem;
   background-color: #fff;
   border-radius: 0.5rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
   overflow: hidden;
+
+   /* 核心：限制高度并添加滚动 */
+   max-height: calc(100vh - 6.75rem); /* 减去头部、功能区和底部导航的高度 */
+   overflow-y: auto; /* 垂直滚动 */
+   -webkit-overflow-scrolling: touch; /* 移动端平滑滚动 */
+}
+
+/* 可选：美化滚动条（针对WebKit浏览器） */
+.message-list::-webkit-scrollbar {
+  width: 6px; /* 滚动条宽度 */
+}
+.message-list::-webkit-scrollbar-thumb {
+  background-color: #ddd; /* 滚动条颜色 */
+  border-radius: 3px; /* 滚动条圆角 */
+}
+.message-list::-webkit-scrollbar-track {
+  background-color: transparent; /* 滚动条轨道透明 */
 }
 
 .post-list {
@@ -17,6 +40,33 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 0.9375rem;
 }
+
+/* 加载提示容器 */
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 0;
+  gap: 0.75rem;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+/* 旋转动画 */
+.spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #eee;
+  border-top-color: #ff6b6b; /* 使用主题色 */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* 动画关键帧 */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 
 .post-item {
   background-color: #f9f9f9;
