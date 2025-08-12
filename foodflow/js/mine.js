@@ -7,7 +7,18 @@ const mockData = {
       title: "广式牛杂牛肋条煲",
       desc: "牛肋条泡血水；撕去金钱肚内部筋膜，用面粉清洗表面杂质，加白醋和盐搓洗干净；将牛肋条和金钱肚焯水后，把金钱肚剪至合适大小……",
     },
-    { id: 2, img: "recipe2.jpg", title: "食谱2", desc: "做法步骤2..." },
+    {
+      id: 2,
+      img: "../img/food_big1.png",
+      title: "广式牛杂牛肋条煲",
+      desc: "牛肋条泡血水；撕去金钱肚内部筋膜，用面粉清洗表面杂质，加白醋和盐搓洗干净；将牛肋条和金钱肚焯水后，把金钱肚剪至合适大小……",
+    },
+    {
+      id: 3,
+      img: "../img/food_big1.png",
+      title: "广式牛杂牛肋条煲",
+      desc: "牛肋条泡血水；撕去金钱肚内部筋膜，用面粉清洗表面杂质，加白醋和盐搓洗干净；将牛肋条和金钱肚焯水后，把金钱肚剪至合适大小……",
+    },
     // 可继续添加更多
   ],
   favorites: [
@@ -17,7 +28,18 @@ const mockData = {
       title: "广式牛杂牛肋条煲",
       desc: "牛肋条泡血水；撕去金钱肚内部筋膜，用面粉清洗表面杂质，加白醋和盐搓洗干净；将牛肋条和金钱肚焯水后，把金钱肚剪至合适大小……",
     },
-    { id: 2, img: "recipe4.jpg", title: "收藏食谱2", desc: "做法步骤2..." },
+    {
+      id: 2,
+      img: "../img/food_big1.png",
+      title: "广式牛杂牛肋条煲",
+      desc: "牛肋条泡血水；撕去金钱肚内部筋膜，用面粉清洗表面杂质，加白醋和盐搓洗干净；将牛肋条和金钱肚焯水后，把金钱肚剪至合适大小……",
+    },
+    {
+      id: 3,
+      img: "../img/food_big1.png",
+      title: "广式牛杂牛肋条煲",
+      desc: "牛肋条泡血水；撕去金钱肚内部筋膜，用面粉清洗表面杂质，加白醋和盐搓洗干净；将牛肋条和金钱肚焯水后，把金钱肚剪至合适大小……",
+    },
     // 可继续添加更多
   ],
   cart: [
@@ -30,10 +52,17 @@ const mockData = {
     },
     {
       id: 2,
-      img: "book2.jpg",
-      title: "食谱书2",
-      author: "作者B",
-      price: "30.6",
+      img: "../img/随园食单40_6.jpg",
+      title: "随园食单",
+      author: "袁枚",
+      price: "40.6",
+    },
+    {
+      id: 3,
+      img: "../img/随园食单40_6.jpg",
+      title: "随园食单",
+      author: "袁枚",
+      price: "40.6",
     },
     // 可继续添加更多
   ],
@@ -42,6 +71,10 @@ const mockData = {
     { id: 2, img: "../img/carousel2.png", title: "灌汤包" },
     { id: 3, img: "../img/carousel3.png", title: "肉酱面" },
     { id: 4, img: "../img/carousel4.png", title: "三文鱼波奇碗" },
+    { id: 5, img: "../img/carousel1.png", title: "开水炖蛋" },
+    { id: 6, img: "../img/carousel2.png", title: "灌汤包" },
+    { id: 7, img: "../img/carousel3.png", title: "肉酱面" },
+    { id: 8, img: "../img/carousel4.png", title: "三文鱼波奇碗" },
     // 可继续添加更多
   ],
 };

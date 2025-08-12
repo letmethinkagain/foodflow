@@ -1,5 +1,14 @@
 /* 订单页面特有样式 */
 
+/* 中间滚动内容区域 */
+.scrollable-content {
+  width: 95%;
+  margin: 3rem auto 0;
+  overflow-y: auto;
+  height: calc(100vh - 11.125rem); /* 减去顶部和底部导航高度 */
+  -webkit-overflow-scrolling: touch; /* 平滑滚动 */
+}
+
 /* 头部返回按钮 ，原背景图方式替换为字符样式*/
 .back-btn {
     width: 1.5rem;
@@ -30,9 +39,9 @@
   /* 订单分类导航 */
   .order-tab {
     background-color: #fff;
-    border-radius: 0.625rem;
-    margin: 0.625rem 0;
-    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.05);
+    /* border-radius: 0.625rem; */
+    margin: 0.1rem 0;
+    /* box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.05); */
     overflow: hidden;
   }
   
