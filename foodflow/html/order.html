@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>订单 - FOOD FLOW</title>
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/hangf.css" />
+    <link rel="stylesheet" href="../css/order.css" />
+    <!-- <link rel="stylesheet" href="css/normalize.css"> -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 顶部固定导航 -->
+    <header class="header fixed-top">
+      <div class="header-inner">
+        <div class="back-btn" onclick="goBack()">&lt;</div> 
+        <div class="search-box">
+          <input type="text" placeholder="搜索我的订单" />
+          <span class="search-icon" onclick="searchOrder()"
+            ><i class="fa fa-search"></i
+          ></span>
+          <span class="search-tip" id="searchTip"></span>
+          <span class="more-icon" onclick="showMoreSearchOptions()">···</span> 
+        </div>
+      </div>
+    </header>
+
+    <!-- 中间滚动内容区域 -->
+    <main class="scrollable-content">
+      <!-- 订单分类导航 -->
+      <nav class="order-tab">
+        <ul>
+          <li class="active">全部</li>
+          <li>待付款</li>
+          <li>待发货</li>
+          <li>待收货</li>
+          <li>评价</li>
+          <li>售后</li>
+        </ul>
+      </nav>
+      <!-- 订单列表 -->
+      <section class="order-list">
+        <article class="order-item">
+          <div class="order-img">
+            <!-- 实际可替换为真实食谱图片 -->
+            <img src="../img/随园食单40_6.jpg" alt="食谱图片" />
+          </div>
+          <div class="order-info">
+            <h3 class="recipe-name">随园食单</h3>
+            <p class="author-name">袁枚</p>
+            <p class="price">¥40.60 <span class="count">×1</span></p>
+            <p class="real-price">实付¥40.60</p>
+          </div>
+          <div class="order-more" onclick="showMoreOptions(this)">更多</div>
+          <div class="more-options" style="display: none">
+            <button onclick="viewComment()">查看评价</button>
+            <button onclick="deleteOrder()">删除订单</button>
+          </div>
+          <div class="order-ops">
+            <button onclick="viewLogistics()">查看物流</button>
+            <button onclick="buyAgain()">再买一单</button>
+          </div>
+        </article>
+        <!-- 可继续添加更多订单 item  -->
+      </section>
+    </main>
+
+    <!-- 底部固定导航 -->
+    <footer class="footer fixed-bottom">
+      <ul class="footer-nav">
+        <li>
+          <a href="index.html"><i class="fa fa-home"></i> 首页</a>
+        </li>
+        <li>
+          <a href="community.html"><i class="fa fa-comments"></i> 社区</a>
+        </li>
+        <li>
+          <a href="message.html" class="active"
+            ><i class="fa fa-envelope"></i> 消息</a
+          >
+        </li>
+        <li>
+          <a href="mine.html"><i class="fa fa-user"></i> 我的</a>
+        </li>
+      </ul>
+    </footer>
+
+    <script src="../js/order.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/server.js"></script>
+  </body>
+</html>
