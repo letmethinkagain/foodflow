@@ -12,11 +12,14 @@
     align-items: center;
     cursor: pointer;
   }
+  .back-btn .fa {
+    font-size: 2rem; /* 按需调整大小 */
+  }
   
   /* 搜索框右侧更多按钮样式 */
   .more-icon {
     margin-left: 1rem;
-    font-size: 1rem;
+    font-size: 1.5rem;
     color: #333;
     cursor: pointer;
     /* 可根据需要调整位置等 */
