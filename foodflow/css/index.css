@@ -658,6 +658,51 @@ body {
   font-weight: bold;
 }
 
+/* 加入购物车按钮样式 */
+.recipe-item p {
+  position: relative; /* 关键：作为按钮的定位父容器 */
+  text-align: center; /* 价格文字居中显示 */
+  padding-right: 0rem;
+  margin: 0; /* 清除默认margin，避免布局偏移 */
+}
+
+/* 新增：用 span 包裹价格，与按钮保持一行 */
+.recipe-item p .price-text {
+  display: inline-block; /* 确保和按钮在同一行 */
+  margin-right: 0.5rem; /* 价格与按钮的间距 */
+}
+
+.add-to-cart {
+  
+  position: absolute; /* 基于父容器p定位 */
+  right: 0; /* 靠右对齐 */
+  top: 50%; /* 垂直居中 */
+  transform: translateY(-50%); /* 精确垂直居中 */
+
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid #ff6b6b;
+  background-color: white;
+  color: #ff6b6b;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.add-to-cart:hover {
+  background-color: #ff6b6b;
+  color: white;
+  transform: translateY(-50%) scale(1.1); /* 悬停时放大且保持垂直居中 */
+}
+
+.add-to-cart:active {
+  transform: scale(0.9); /* 点击时缩小效果 */
+}
+
 /* 底部导航样式 */
 .footer-nav {
   display: flex;

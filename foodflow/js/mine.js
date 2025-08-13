@@ -138,6 +138,7 @@ function renderContent(type) {
     data.forEach((item) => {
       const itemElem = document.createElement("div");
       itemElem.classList.add("item", "cart-item"); // 关键：加上 cart-item 类名
+      itemElem.dataset.id = item.id; // 添加数据ID，方便删除时查找
 
       // 选择按钮
       const checkBox = document.createElement('input');
@@ -147,6 +148,23 @@ function renderContent(type) {
         const cartItem = cartData.find(c => c.id === item.id);
         if (cartItem) cartItem.checked = checkBox.checked;
         calculateTotal(cartData); // 选中状态变化时重新计算总价
+      });
+
+      // 添加删除按钮
+      const deleteBtn = document.createElement('button');
+      deleteBtn.classList.add('delete-btn');
+      deleteBtn.innerHTML = '<i class="fa fa-times"></i>'; // 使用Font Awesome的叉号图标
+      deleteBtn.title = '删除商品';
+      deleteBtn.addEventListener('click', () => {
+        // 从DOM中移除商品元素
+        itemElem.remove();
+        
+        // 从购物车数据中移除
+        const index = cartData.findIndex(c => c.id === item.id);
+        if (index !== -1) {
+          cartData.splice(index, 1);
+          calculateTotal(cartData); // 重新计算总价
+        }
       });
 
       // 1. 图片
@@ -208,7 +226,7 @@ function renderContent(type) {
       info.appendChild(desc);
 
       // 3. 组装单项并存储数据
-      itemElem.append(checkBox, img, info);
+      itemElem.append(checkBox, img, info, deleteBtn);
       list.append(itemElem);
 
       // 初始化购物车数据（含价格、数量）
