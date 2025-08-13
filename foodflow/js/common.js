@@ -76,7 +76,7 @@ function getCurrentUser() {
  */
 function logout() {
     localStorage.removeItem('userInfo');
-    jumpWithTip('login.html', '已成功退出登录');
+    // jumpWithTip('login.html', '已成功退出登录');
 }
     
 
@@ -114,11 +114,11 @@ function showLoginModal() {
                 <h3 class="text-lg font-medium text-gray-800">需要登录</h3>
                 <p class="text-gray-500 mt-1">该操作需要登录账号，是否前往登录？</p>
             </div>
-            <div class="flex gap-3 mt-6">
-                <button id="cancelLogin" class="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+            <div class="flex justify-center gap-3 mt-6" id="button-area">
+                <button id="cancelLogin" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
                     取消
                 </button>
-                <button id="goLogin" class="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                <button id="goLogin" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                     去登录
                 </button>
             </div>
@@ -170,7 +170,7 @@ function updateHeaderUserAction() {
     if (!container) return; // 非首页无容器，直接返回
   
     if (checkLogin()) {
-        // 已登录：渲染仅带边框头像 + 退出按钮（隐藏用户名）
+        // 已登录：渲染仅带边框头像
         const user = getCurrentUser();
         container.innerHTML = `
           <a href="html/cart.html" class="cart-icon"><i class="fa fa-shopping-cart"></i></a>
@@ -196,4 +196,16 @@ function updateHeaderUserAction() {
   // 页面加载时自动执行更新
   window.addEventListener('load', () => {
     updateHeaderUserAction();
+
+    // 页面加载完成后绑定“消息”按钮事件
+    const messageLink = document.getElementById('messageLink');
+    if (messageLink) {
+        messageLink.addEventListener('click', (e) => {
+        // 未登录时阻止默认跳转，显示弹窗
+        if (!checkLoginWithModal()) {
+            e.preventDefault(); // 阻止跳转到 message.html
+        }
+        // 已登录时，允许默认跳转（正常进入消息页）
+        });
+    }
   });

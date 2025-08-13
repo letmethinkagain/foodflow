@@ -1,3 +1,7 @@
+.scrollable-content{
+  margin-top: 0.5rem;
+}
+
 /* 用户信息及功能区样式 */
 .user-section {
   background-color: #fff;
@@ -41,7 +45,7 @@
 
 .user-text .login-tip {
   font-size: 0.875rem;
-  color: #999;
+  color: #949494;
   cursor: pointer; /* 未登录提示可点击 */
 }
 
