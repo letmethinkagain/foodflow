@@ -36,13 +36,23 @@
     <main class="scrollable-content">
       <!-- 用户信息及功能区 -->
       <section class="user-section">
-        <div class="user-info">
-          <div class="avatar">
+        <div class="user-info" id="userInfoContainer">
+          <!-- 登录状态：显示头像、用户名、退出按钮 -->
+          <div class="avatar logged-avatar" style="display: none;">
             <img src="../img/carousel1.png" alt="头像" />
           </div>
-          <div class="user-text">
+          <div class="user-text logged-text" style="display: none;">
+            <p class="username" id="loggedUsername">用户名</p>
+          </div>
+          <button class="logout-btn" id="logoutBtn" style="display: none;">退出登录</button>
+        
+          <!-- 未登录状态：默认显示 -->
+          <div class="avatar unlogged-avatar">
+            <img src="../img/carousel1.png" alt="头像" />
+          </div>
+          <div class="user-text unlogged-text">
             <p class="username">用户名</p>
-            <p class="login-tip">请先登录</p>
+            <p class="login-tip" id="unloggedTip">请先登录</p>
           </div>
         </div>
         <div class="user-functions">

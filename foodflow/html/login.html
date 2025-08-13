@@ -38,15 +38,15 @@
                 </div>
             </div>
 
-            
+                
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 font-medium bt">
+                登录
+            </button>
+            <div class="agree">
+                <input type="checkbox" id="agree">
+                <label for="agree">我已同意《服务协议》《隐私政策》《儿童隐私政策》</label>
+            </div>
         </form>
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 font-medium bt">
-            登录
-        </button>
-        <div class="agree">
-            <input type="checkbox" id="agree">
-            <label for="agree">我已同意《服务协议》《隐私政策》《儿童隐私政策》</label>
-        </div>
 
         <div class="mt text-center">
             <a href="register.html" class="text-blue-600 hover:text-blue-800 text-sm">还没有账号？去注册</a>
@@ -72,50 +72,54 @@
         window.onload = function() {
             if (checkLogin()) {
                 // 已登录，直接跳转到主页面
-                jumpWithTip('../index.html', '您已登录', 1000);
+                jumpWithTip('index.html', '您已登录', 1000);
             }
         }
 
         // 登录表单提交处理
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
+        e.preventDefault();
+        
+        const loginName = document.getElementById('username').value.trim(); // 改为loginName（支持账号/手机号）
+        const password = document.getElementById('password').value.trim();
+        const agree = document.getElementById('agree').checked;
 
-            // 简单的表单验证
-            if (!username) {
-                showToast('请输入账号', true);
-                return;
-            }
-            
-            if (!password) {
-                showToast('请输入密码', true);
-                return;
-            }
+        // 1. 表单验证
+        if (!agree) {
+            showToast('请同意相关协议', true);
+            return;
+        }
+        if (!loginName) {
+            showToast('请输入账号/手机号', true);
+            return;
+        }
+        if (!password) {
+            showToast('请输入密码', true);
+            return;
+        }
 
-            // 调用登录接口
-            fetch('http://localhost:3000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.code === 200) {
-                    // 登录成功，保存用户信息
-                    localStorage.setItem('userInfo', JSON.stringify(data.data));
-                    jumpWithTip('../index.html', '登录成功，进入主页面');
-                } else {
-                    showToast(data.msg || '账号或密码错误', true);
-                }
-            })
-            .catch(error => {
-                console.error('登录请求错误：', error);
-                showToast('网络错误，请检查后端是否启动', true);
-            });
+        // 2. 调用登录接口
+        fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ loginName, password }) // 用loginName字段
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === 200) {
+            // 保存用户信息
+            localStorage.setItem('userInfo', JSON.stringify(data.data));
+            // 登录成功后，跳回之前的页面（通过redirectAfterLogin方法）
+            showToast('登录成功，正在跳转...');
+            setTimeout(redirectAfterLogin, 1000); // 延迟1秒跳转，让用户看到提示
+            } else {
+            showToast(data.msg || '账号/手机号或密码错误', true);
+            }
+        })
+        .catch(error => {
+            console.error('登录请求错误：', error);
+            showToast('网络错误，请检查后端是否启动', true);
+        });
         });
     </script>
 </body>

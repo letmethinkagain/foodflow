@@ -27,6 +27,12 @@
   object-fit: cover;
 }
 
+/* 用户名/提示文本通用样式 */
+.user-text {
+  display: flex;
+  flex-direction: column;
+}
+
 .user-text .username {
   font-size: 1rem;
   color: #333;
@@ -36,7 +42,25 @@
 .user-text .login-tip {
   font-size: 0.875rem;
   color: #999;
+  cursor: pointer; /* 未登录提示可点击 */
 }
+
+/* 退出按钮样式 */
+.logout-btn {
+  background: #ff6b6b;
+  color: #fff;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: auto;
+  margin-bottom: auto;
+  font-size: 0.8rem;
+}
+.logout-btn:hover {
+  opacity: 0.9;
+}
+
 
 .user-functions {
   display: flex;

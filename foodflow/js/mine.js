@@ -454,3 +454,44 @@ function clearSelectedItems(cartData) {
   // 然后重新渲染购物车
   renderContent('cart');
 }
+
+
+function updateMyPageUserInfo() {
+  const container = document.getElementById('userInfoContainer');
+
+  const user = getCurrentUser();
+  if (user) {
+    // 已登录：显示头像、用户名、退出按钮
+    container.querySelector('.unlogged-avatar').style.display = 'none';
+    container.querySelector('.unlogged-text').style.display = 'none';
+    container.querySelector('.logged-avatar').style.display = 'block';
+    container.querySelector('.logged-text').style.display = 'block';
+    container.querySelector('#logoutBtn').style.display = 'block';
+    // 设置用户名（若有真实用户名，替换 user.username 即可）
+    container.querySelector('#loggedUsername').textContent = user.username;
+    // 退出按钮绑定事件
+    container.querySelector('#logoutBtn').addEventListener('click', () => {
+      logout();
+      // 退出后重新更新“我的”页面显示（延迟保证 localStorage 已清除）
+      setTimeout(updateMyPageUserInfo, 500);
+    });
+  } else {
+    // 未登录：显示默认提示，点击“请先登录”跳转
+    container.querySelector('.logged-avatar').style.display = 'none';
+    container.querySelector('.logged-text').style.display = 'none';
+    container.querySelector('#logoutBtn').style.display = 'none';
+    container.querySelector('.unlogged-avatar').style.display = 'block';
+    container.querySelector('.unlogged-text').style.display = 'block';
+    // 绑定“请先登录”点击事件
+    container.querySelector('#unloggedTip').addEventListener('click', () => {
+      // 记录当前页面，登录后返回
+      localStorage.setItem('redirectAfterLogin', window.location.href);
+      jumpTo('login.html');
+    });
+  }
+}
+
+// “我的”页面加载时自动执行
+window.addEventListener('load', () => {
+  updateMyPageUserInfo();
+});

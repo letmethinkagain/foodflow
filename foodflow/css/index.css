@@ -97,7 +97,7 @@ body {
 .logo img {
   width: 2.8125rem;
   height: 2.8125rem;
-  border-radius: 50%;
+  /* border-radius: 50%; */
 }
 
 .search-box {
@@ -148,6 +148,33 @@ body {
 
 .login-register a:hover {
   color: #ff6b6b;
+}
+
+/* 已登录用户头像及相关样式 */
+.logged-user {
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-size: 0.875rem;
+}
+.avatar {
+  font-weight: bold;
+  border: #7c7c7c 0.0625rem solid;
+  border-radius: 2rem;
+  height: 2.5rem;
+  width: 2.5rem;
+  text-align: center;
+  padding: auto;
+}
+.logout-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-bottom: -1rem;
+}
+.logout-btn:hover {
+  text-decoration: underline;
 }
 
 /* 视频区域样式 */
