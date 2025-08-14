@@ -83,11 +83,41 @@ const mockData = {
 const funcItems = document.querySelectorAll(".func-item");
 const contentDisplay = document.getElementById("contentDisplay");
 
-// 绑定点击事件
+// 新增：登录状态判断函数
+function checkLogin() {
+  const user = getCurrentUser();
+  return !!user; // 返回布尔值
+}
+
+
+
+// 修改：绑定点击事件（增加登录判断）
 funcItems.forEach((button) => {
   button.addEventListener("click", () => {
     const type = button.getAttribute("data-type");
+    const isLoggedIn = checkLogin();
+    
+    // 未登录状态处理
+    if (!isLoggedIn) {
+      const prompts = {
+        'history': '请先登录查看历史记录',
+        'favorites': '请先登录查看我的收藏',
+        'cart': '请先登录查看购物车',
+        'recipes': '请先登录查看我的食谱'
+      };
+      contentDisplay.innerHTML = `<p class="login-prompt">${prompts[type] || '请先登录以使用该功能'}</p>`;
+      
+      // 重置按钮状态
+      funcIcons.forEach(icon => icon.classList.remove("active"));
+      return;
+    }
+    
+    // 已登录状态：正常渲染
     renderContent(type);
+    
+    // 激活当前按钮图标
+    funcIcons.forEach(icon => icon.classList.remove("active"));
+    button.querySelector('i').classList.add("active");
   });
 });
 
@@ -301,19 +331,26 @@ function renderContent(type) {
   }
 }
 
-// 页面加载完成后执行
+// 页面加载完成后执行（修改初始化逻辑）
 document.addEventListener("DOMContentLoaded", function () {
-  // 1. 找到“历史记录”对应的图标（根据 data-type 定位）
+  // 初始化用户信息
+  updateMyPageUserInfo();
+  
+  // 检查登录状态
+  const isLoggedIn = checkLogin();
+  
+  // 1. 找到“历史记录”对应的图标
   const historyIcon = document.querySelector(
     '.func-item[data-type="history"] i'
   );
 
-  // 2. 如果找到图标，手动添加 active 类名（触发灰色背景）
-  if (historyIcon) {
+  // 2. 已登录状态才初始化内容
+  if (isLoggedIn && historyIcon) {
     historyIcon.classList.add("active");
-
-    // 3. 同时自动触发历史记录的内容渲染（如果需要默认显示内容）
     renderContent("history");
+  } else {
+    // 未登录状态显示提示
+    contentDisplay.innerHTML = '<p class="login-prompt">请先登录以使用更多功能</p>';
   }
 });
 

@@ -20,18 +20,14 @@
   <header class="header fixed-top">
     <div class="header-inner">
       <div class="logo">
-        <img src="../img/logo.png" alt="LOGO" />
+        <img src="../img/android-chrome-192x192.png" alt="LOGO" />
       </div>
       <div class="search-box">
         <input type="text" placeholder="搜索" />
         <span class="search-icon"><i class="fa fa-search"></i></span>
       </div>
       <div class="cart-login">
-        <a href="#" class="cart-icon"><i class="fa fa-shopping-cart"></i></a>
-        <div class="login-register">
-          <a href="login.html">登录</a><span>|</span
-          ><a href="register.html">注册</a>
-        </div>
+        <a href="mine.html" class="cart-icon" id="messageCartIcon"><i class="fa fa-shopping-cart"></i></a>
       </div>
     </div>
   </header>
@@ -211,6 +207,55 @@
       </li>
     </ul>
   </footer>
+
+  <script>
+    // 消息页面购物车图标点击事件
+    document.addEventListener('DOMContentLoaded', function() {
+      const cartIcon = document.getElementById('messageCartIcon');
+      if (cartIcon) {
+        cartIcon.addEventListener('click', function(e) {
+          // 阻止默认跳转，使用带提示的跳转
+          e.preventDefault();
+          
+          // 标记从购物车图标跳转
+          localStorage.setItem('fromCart', 'icon');
+          
+          // 带提示跳转到我的页面
+          jumpWithTip('mine.html', '前往我的购物车', 1000);
+        });
+      }
+    });
+
+    // 引入通用工具函数（如果common.js已全局引入可省略）
+    // 这里仅保留跳转相关函数，确保功能可用
+    function jumpTo(url) {
+      window.location.href = url;
+    }
+
+    function jumpWithTip(url, msg, delay = 1500) {
+      showToast(msg);
+      setTimeout(() => {
+        jumpTo(url);
+      }, delay);
+    }
+
+    function showToast(msg, isError = false) {
+      const oldToast = document.querySelector('.custom-toast');
+      if (oldToast) oldToast.remove();
+
+      const toast = document.createElement('div');
+      toast.className = `custom-toast fixed bottom-8 left-1/2 transform -translate-x-1/2 px-4 py-3 rounded-lg text-white z-50 transition-all duration-300 ${
+        isError ? 'bg-red-500' : 'bg-green-500'
+      }`;
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
 </body>
 
 </html>

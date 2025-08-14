@@ -76,7 +76,11 @@ function getCurrentUser() {
  */
 function logout() {
     localStorage.removeItem('userInfo');
-    // jumpWithTip('login.html', '已成功退出登录');
+    showToast('已成功退出登录');
+    updateHeaderUserAction(); // 更新头部
+    if (window.location.pathname.includes('mine.html')) {
+        updateMyPageUserInfo(); // 更新我的页面
+    }
 }
     
 
@@ -163,17 +167,17 @@ function redirectAfterLogin() {
 
 
 /**
- * 扩展：页面加载时更新头部用户操作区（登录/头像切换）
+ * 扩展：页面加载时更新头部用户操作区（登录/头像切换 + 购物车逻辑）
  */
 function updateHeaderUserAction() {
     const container = document.getElementById('userActionContainer');
     if (!container) return; // 非首页无容器，直接返回
   
     if (checkLogin()) {
-        // 已登录：渲染仅带边框头像
+        // 已登录：渲染仅带边框头像 + 购物车跳转“我的”页面
         const user = getCurrentUser();
         container.innerHTML = `
-          <a href="html/cart.html" class="cart-icon"><i class="fa fa-shopping-cart"></i></a>
+          <a href="mine.html" class="cart-icon" id="loggedCartIcon"><i class="fa fa-shopping-cart"></i></a>
           <div class="logged-user flex items-center">
             <!-- 带边框的头像，用用户名首字母示例，可扩展真实头像 -->
             <div class="avatar bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2 border-2 border-white">
@@ -181,31 +185,96 @@ function updateHeaderUserAction() {
             </div>
           </div>
         `;
+
     } else {
       // 未登录：渲染登录注册
       container.innerHTML = `
-        <a href="html/cart.html" class="cart-icon"><i class="fa fa-shopping-cart"></i></a>
+        <a href="javascript:void(0)" class="cart-icon" id="unloggedCartIcon"><i class="fa fa-shopping-cart"></i></a>
         <div class="login-register">
           <a href="login.html">登录</a><span>|</span>
           <a href="register.html">注册</a>
         </div>
       `;
+
     }
   }
+
+
+    // 绑定购物车图标点击事件（通用逻辑）
+    function bindCartIconEvent() {
+        const cartIcon = document.querySelector('.cart-icon');
+        if (!cartIcon) return;
+
+        cartIcon.addEventListener('click', (e) => {
+            e.preventDefault(); // 阻止默认跳转
+
+            if (checkLogin()) {
+                // 已登录：标记跳转来源，跳转到我的页面
+                localStorage.setItem('fromCart', 'true');
+                jumpWithTip('mine.html', '前往我的购物车', 1000);
+            } else {
+                // 未登录：显示登录弹窗
+                showLoginModal();
+            }
+        });
+    }
   
-  // 页面加载时自动执行更新
-  window.addEventListener('load', () => {
+    /**
+     * 激活我的页面购物车功能区
+     */
+    function activateMyPageCart() {
+        // 确保在mine.html中执行
+        if (!window.location.pathname.includes('mine.html')) return;
+
+        // 等待DOM完全加载（100ms延迟确保按钮已渲染）
+        setTimeout(() => {
+            const cartBtn = document.querySelector('.func-item[data-type="cart"]');
+            if (cartBtn) {
+                cartBtn.click(); // 触发点击加载内容
+
+                // 找到按钮内的 i 元素，添加 active 类名（对应你的 CSS 置灰规则）
+                const cartIcon = cartBtn.querySelector('i');
+                if (cartIcon) {
+                    cartIcon.classList.add('active');
+                }
+
+                // 移除其他按钮 i 元素的 active 类名
+                document.querySelectorAll('.func-item i').forEach(icon => {
+                    if (icon!== cartIcon) {
+                        icon.classList.remove('active');
+                    }
+                });
+            }
+        }, 100);
+    }
+
+
+  
+/**
+ * 页面初始化（合并所有load事件）
+ */
+window.addEventListener('load', () => {
+    // 1. 更新头部
     updateHeaderUserAction();
 
-    // 页面加载完成后绑定“消息”按钮事件
+    // 2. 绑定购物车点击事件
+    bindCartIconEvent();
+
+    // 3. 绑定消息按钮事件
     const messageLink = document.getElementById('messageLink');
     if (messageLink) {
         messageLink.addEventListener('click', (e) => {
-        // 未登录时阻止默认跳转，显示弹窗
-        if (!checkLoginWithModal()) {
-            e.preventDefault(); // 阻止跳转到 message.html
-        }
-        // 已登录时，允许默认跳转（正常进入消息页）
+            if (!checkLoginWithModal()) e.preventDefault();
         });
     }
-  });
+
+    // 4. 我的页面专属逻辑
+    if (window.location.pathname.includes('mine.html')) {
+        updateMyPageUserInfo(); // 更新用户信息
+        // 检查是否从购物车图标跳转，若是则激活购物车
+        if (localStorage.getItem('fromCart')) {
+            localStorage.removeItem('fromCart'); // 清除标记
+            activateMyPageCart(); // 激活购物车
+        }
+    }
+});
