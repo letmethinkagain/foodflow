@@ -15,9 +15,9 @@ function jumpTo(url) {
  * 带提示的页面跳转
  * @param {string} url - 目标页面路径
  * @param {string} msg - 提示信息
- * @param {number} delay - 延迟时间(毫秒)，默认1500
+ * @param {number} delay - 延迟时间(毫秒)，默认5000
  */
-function jumpWithTip(url, msg, delay = 1500) {
+function jumpWithTip(url, msg, delay = 5000) {
     showToast(msg);
     setTimeout(() => {
         jumpTo(url);
@@ -36,21 +36,29 @@ function showToast(msg, isError = false) {
         oldToast.remove();
     }
 
-    // 创建新的toast元素
+    // 创建新弹窗
     const toast = document.createElement('div');
-    toast.className = `custom-toast fixed bottom-8 left-1/2 transform -translate-x-1/2 px-4 py-3 rounded-lg text-white z-50 transition-all duration-300 ${
-        isError ? 'bg-red-500' : 'bg-green-500'
-    }`;
+    toast.className = `custom-toast ${isError ? 'error' : ''}`;
     toast.textContent = msg;
+    toast.style.position = 'fixed';
+    toast.style.top = '50%';
+    toast.style.left = '50%';
+    toast.style.transform = 'translate(-50%, -50%)';
+    toast.style.padding = '0.75rem 1.5rem';
+    toast.style.borderRadius = '0.5rem';
+    toast.style.backgroundColor = isError ? '#ff4d4f' : 'rgba(0, 0, 0, 0.7)';
+    toast.style.color = 'white';
+    toast.style.zIndex = '9999';
+    toast.style.transition = 'opacity 0.3s ease';
 
     // 添加到页面
     document.body.appendChild(toast);
 
-    // 3秒后自动消失
+    // 5秒后自动消失
     setTimeout(() => {
-        toast.classList.add('opacity-0');
+        toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    }, 5000);
 }
 
 /**
@@ -211,7 +219,7 @@ function updateHeaderUserAction() {
             if (checkLogin()) {
                 // 已登录：标记跳转来源，跳转到我的页面
                 localStorage.setItem('fromCart', 'true');
-                jumpWithTip('mine.html', '前往我的购物车', 1000);
+                jumpWithTip('mine.html', '前往我的购物车', 5000);
             } else {
                 // 未登录：显示登录弹窗
                 showLoginModal();

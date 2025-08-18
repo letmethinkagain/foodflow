@@ -314,9 +314,12 @@ async function renderContent(type) {
         quantityWrapper.classList.add('quantity-wrapper');
 
         const minusBtn = document.createElement('button');
+        minusBtn.type = 'button';
         minusBtn.classList.add('quantity-btn');
         minusBtn.textContent = '-';
-        minusBtn.addEventListener('click', async () => {
+        minusBtn.addEventListener('click', async (e) => {
+          e.preventDefault(); // 新增：阻止默认行为
+          e.stopPropagation(); // 新增：阻止事件冒泡
           const newQty = item.quantity - 1;
           if (newQty < 1) return;
           await updateQuantity(item.recipe_id, newQty);
@@ -330,6 +333,8 @@ async function renderContent(type) {
         quantityInput.type = 'number';
         quantityInput.value = item.quantity;
         quantityInput.addEventListener('input', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           let newQty = parseInt(e.target.value) || 1;
           newQty = Math.max(1, newQty); // 确保数量不小于1
           await updateQuantity(item.recipe_id, newQty);
@@ -339,9 +344,12 @@ async function renderContent(type) {
         });
 
         const plusBtn = document.createElement('button');
+        plusBtn.type = 'button';
         plusBtn.classList.add('quantity-btn');
         plusBtn.textContent = '+';
-        plusBtn.addEventListener('click', async () => {
+        plusBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           const newQty = item.quantity + 1;
           await updateQuantity(item.recipe_id, newQty);
           item.quantity = newQty;
@@ -420,9 +428,11 @@ async function renderContent(type) {
       totalText.textContent = '合计: ¥0';
       
       const checkoutBtn = document.createElement('button');
+      checkoutBtn.type = 'button';
       checkoutBtn.classList.add('checkout-btn');
       checkoutBtn.textContent = '结算';
-      checkoutBtn.addEventListener('click', async () => {
+      checkoutBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
         await checkout(cartData, user.id);
       });
       

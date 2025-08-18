@@ -6,12 +6,22 @@ function getCurrentUser() {
 
 // 绑定添加购物车事件
 document.querySelectorAll('.add-to-cart').forEach(button => {
-  button.addEventListener('click', async () => {
+  button.addEventListener('click', async (e) => {
+    e.preventDefault(); // 阻止默认行为（如跳转）
+    e.stopPropagation(); // 阻止事件冒泡
+
+    // 检查按钮是否在<form>内，如果是则阻止表单提交
+    if (button.closest('form')) {
+      e.stopImmediatePropagation(); // 阻止其他可能的事件监听器
+    }
+
     const user = getCurrentUser();
     if (!user) {
-      alert('请先登录');
+      showToast('请先登录',true);
       localStorage.setItem('redirectAfterLogin', window.location.href);
-      window.location.href = 'login.html'; // 跳转到登录页
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 5000); // 延迟跳转，让提示可见
       return;
     }
 
@@ -23,10 +33,10 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
         body: JSON.stringify({ user_id: user.id, recipe_id: parseInt(recipeId) })
       });
       const data = await res.json();
-      alert(data.msg); // 提示"添加成功"或错误信息
+      showToast(data.msg); // 提示"添加成功"或错误信息
     } catch (err) {
       console.error('添加失败', err);
-      alert('添加失败，请重试');
+      showToast('添加失败，请重试', true);
     }
   });
 });
