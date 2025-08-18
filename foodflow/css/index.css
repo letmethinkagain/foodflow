@@ -116,7 +116,7 @@ body {
   width: 100%;
   padding: 0.5rem 0.75rem;
   padding-left: 2.1875rem;
-  border: 0.0625rem solid #ddd;
+  border: 0.0625rem solid rgba(255, 85, 85, 0.35);
   border-radius: 1.25rem;
   font-size: 0.875rem;
 }
@@ -124,7 +124,7 @@ body {
 .search-icon {
   position: absolute;
   left: 0.75rem;
-  color: #2b2b2b;
+  color: #ff7a7a;
 }
 
 .cart-login {
@@ -134,7 +134,7 @@ body {
 
 .cart-icon {
   display: inline-block;
-  color: #7c7c7c;
+  color: #ff7a7a;
   font-size: 1.125rem;
   margin-right: 0.9375rem;
   height: 2.7143rem;
@@ -151,22 +151,23 @@ body {
 }
 
 .login-register a:hover {
-  color: #ff6b6b;
+  color: #ff7a7a;
 }
 
 /* 已登录用户头像及相关样式 */
 .logged-user {
   display: flex;
   align-items: center;
-  color: #333;
+  color: #e04a4a;
   font-size: 0.875rem;
 }
 .avatar {
   font-weight: bold;
-  border: #7c7c7c 0.0625rem solid;
+  border: rgb(255, 122, 122,0.5) 0.0625rem solid;
   border-radius: 2rem;
   height: 2.5rem;
   width: 2.5rem;
+  line-height: 2.5rem;
   text-align: center;
   padding: auto;
 }
@@ -248,7 +249,7 @@ body {
 }
 
 .tab-item.active {
-  color: #ff6b6b;
+  color: #ff7a7a;
   font-weight: bold;
 }
 
@@ -473,7 +474,7 @@ body {
   display: flex;
   align-items: center;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
-  max-width: 1200px;
+  max-width: 75rem;
   width: 100%; /* 确保宽度占满容器 */
   aspect-ratio: 2/1; /* 设置宽高比为2:1 */
   margin: 0 auto;
@@ -569,10 +570,9 @@ body {
 /* 新增：更多按钮样式 */
 .more-btn {
   background: linear-gradient(
-    90deg,
-    hwb(358 53% 0%) 0%,
-    #fad0c4 99%,
-    hsl(272, 100%, 83%) 100%
+    90deg, 
+    rgb(255, 135, 139),
+    rgb(250, 208, 196)
   );
   color: white;
   border: none;
@@ -710,16 +710,16 @@ body {
   top: 50%; /* 垂直居中 */
   transform: translateY(-50%); /* 精确垂直居中 */
 
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.3125rem;
+  height: 1.3125rem;
   border-radius: 50%;
   border: 1px solid #ff6b6b;
   background-color: white;
   color: #ff6b6b;
-  font-size: 1rem;
+  font-size: 0.875rem;
   cursor: pointer;
   display: inline-flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
   transition: all 0.2s ease;
 }
@@ -755,7 +755,7 @@ body {
 }
 
 .footer-nav li a.active {
-  color: #ff6b6b;
+  color: #ff7a7a;
 }
 
 /* 响应式调整 */
@@ -805,11 +805,11 @@ body {
 /* 弹窗内容容器样式（保持原有圆角和阴影） */
 .login-modal > div {
   width: 100%;
-  max-width: 300px; /* 限制最大宽度 */
+  max-width: 18.75rem; /* 限制最大宽度 */
   background-color: white;
   border-radius: 0.75rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* 增强阴影感 */
+  box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.15); /* 增强阴影感 */
 }
 
 /* 弹窗按钮通用样式优化 */

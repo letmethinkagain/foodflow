@@ -58,7 +58,7 @@ function showToast(msg, isError = false) {
  * @returns {boolean} 是否登录
  */
 function checkLogin() {
-    const userInfo = localStorage.getItem('userInfo');
+    const userInfo = localStorage.getItem('currentUser');
     return !!userInfo;
 }
 
@@ -67,7 +67,7 @@ function checkLogin() {
  * @returns {object|null} 用户信息对象或null
  */
 function getCurrentUser() {
-    const userInfo = localStorage.getItem('userInfo');
+    const userInfo = localStorage.getItem('currentUser');
     return userInfo ? JSON.parse(userInfo) : null;
 }
 
@@ -75,7 +75,7 @@ function getCurrentUser() {
  * 退出登录
  */
 function logout() {
-    localStorage.removeItem('userInfo');
+    localStorage.removeItem('currentUser');
     showToast('已成功退出登录');
     updateHeaderUserAction(); // 更新头部
     if (window.location.pathname.includes('mine.html')) {
@@ -278,3 +278,12 @@ window.addEventListener('load', () => {
         }
     }
 });
+
+// 监听storage事件，当currentUser变化时同步更新所有页面
+window.addEventListener('storage', function(event) {
+    if (event.key === 'currentUser') {
+      if (document.getElementById('userInfoContainer')) {
+        updateMyPageUserInfo();
+      }
+    }
+  });

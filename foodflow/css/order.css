@@ -15,7 +15,7 @@
     height: 1.5rem;
     /* 用字符<，并设置字体等样式让其美观 */
     font-size: 1.2rem; 
-    color: #333;
+    color: #ff7a7a;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,7 +29,7 @@
   .more-icon {
     margin-left: 1rem;
     font-size: 1.5rem;
-    color: #333;
+    color: #ff7a7a;
     cursor: pointer;
     /* 可根据需要调整位置等 */
     display: flex;
@@ -40,6 +40,7 @@
   .order-tab {
     background-color: #fff;
     /* border-radius: 0.625rem; */
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
     margin: 0.1rem 0;
     /* box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.05); */
     overflow: hidden;
@@ -150,6 +151,12 @@
   }
   
   .real-price {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 0.3125rem;
+  }
+
+  .order-time {
     font-size: 0.75rem;
     color: #999;
     margin-top: 0.3125rem;

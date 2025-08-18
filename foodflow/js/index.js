@@ -1,3 +1,37 @@
+// 从localStorage获取当前登录用户
+function getCurrentUser() {
+  const userStr = localStorage.getItem('currentUser');
+  return userStr ? JSON.parse(userStr) : null;
+}
+
+// 绑定添加购物车事件
+document.querySelectorAll('.add-to-cart').forEach(button => {
+  button.addEventListener('click', async () => {
+    const user = getCurrentUser();
+    if (!user) {
+      alert('请先登录');
+      localStorage.setItem('redirectAfterLogin', window.location.href);
+      window.location.href = 'login.html'; // 跳转到登录页
+      return;
+    }
+
+    const recipeId = button.closest('.recipe-item').dataset.id;
+    try {
+      const res = await fetch('http://localhost:3000/api/cart/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id, recipe_id: parseInt(recipeId) })
+      });
+      const data = await res.json();
+      alert(data.msg); // 提示"添加成功"或错误信息
+    } catch (err) {
+      console.error('添加失败', err);
+      alert('添加失败，请重试');
+    }
+  });
+});
+
+
 // 轮播图基础功能
 document.addEventListener('DOMContentLoaded', function() {
   const carousel = document.querySelector('.carousel');

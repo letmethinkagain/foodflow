@@ -1,3 +1,13 @@
+// 获取所有功能按钮的图标元素
+const funcIcons = document.querySelectorAll(".func-item i");
+
+// 添加 logout 函数
+function logout() {
+  localStorage.removeItem('currentUser');
+  // 可以添加跳转到首页或其他逻辑
+  window.location.href = 'index.html';
+}
+
 // 模拟数据
 const mockData = {
   history: [
@@ -79,6 +89,17 @@ const mockData = {
   ],
 };
 
+// 获取当前登录用户信息
+function getCurrentUser() {
+  const userStr = localStorage.getItem('currentUser');
+  return userStr ? JSON.parse(userStr) : null;
+}
+
+// 页面跳转辅助函数
+function jumpTo(url) {
+  window.location.href = url;
+}
+
 // 获取元素
 const funcItems = document.querySelectorAll(".func-item");
 const contentDisplay = document.getElementById("contentDisplay");
@@ -121,12 +142,29 @@ funcItems.forEach((button) => {
   });
 });
 
-// 渲染内容函数
-function renderContent(type) {
+// 渲染内容函数（异步版本，支持购物车数据加载）
+async function renderContent(type) {
   contentDisplay.innerHTML = "";
-  const data = mockData[type];
+  const user = getCurrentUser();
+  
+  // 显示加载状态
+  contentDisplay.innerHTML = '<div class="loading">加载中...</div>';
 
   if (type === "history" || type === "favorites") {
+    // 历史记录和收藏夹的渲染（保持原样）
+    const mockData = {
+      history: [
+        { id: 1, img: "food_big1.png", title: "广式牛杂牛肋条煲", desc: "牛肋条泡血水；撕去金钱肚内部筋膜..." },
+        { id: 2, img: "food_big1.png", title: "广式牛杂牛肋条煲", desc: "牛肋条泡血水；撕去金钱肚内部筋膜..." },
+        { id: 3, img: "food_big1.png", title: "广式牛杂牛肋条煲", desc: "牛肋条泡血水；撕去金钱肚内部筋膜..." }
+      ],
+      favorites: [
+        { id: 1, img: "food_big1.png", title: "广式牛杂牛肋条煲", desc: "牛肋条泡血水；撕去金钱肚内部筋膜..." },
+        { id: 2, img: "food_big1.png", title: "广式牛杂牛肋条煲", desc: "牛肋条泡血水；撕去金钱肚内部筋膜..." }
+      ]
+    };
+
+    const data = mockData[type];
     const list = document.createElement("div");
     list.classList.add("item-list");
 
@@ -157,157 +195,263 @@ function renderContent(type) {
       list.appendChild(itemElem);
     });
 
+    contentDisplay.innerHTML = "";
     contentDisplay.appendChild(list);
-  } else if (type === "cart") {
-    const list = document.createElement("div");
-    list.classList.add("item-list");
+  } 
+  else if (type === "cart") {
+    // 购物车渲染（核心功能）
+    if (!user) {
+      contentDisplay.innerHTML = '<p class="login-prompt">请先登录</p>';
+      return;
+    }
 
-    // 新增：存储购物车数据（用于计算总价）
-    const cartData = []; 
+    try {
+      // 从后端获取购物车数据
+      const res = await fetch(`http://localhost:3000/api/cart?user_id=${user.id}`);
+      const data = await res.json();
+      
+      if (data.code !== 200) {
+        contentDisplay.innerHTML = `<p class="login-prompt">${data.msg}</p>`;
+        return;
+      }
+      
+      const cartData = data.data; // 购物车数据：[{recipe_id, title, price, quantity, ...}, ...]
+      
+      // 如果购物车为空
+      if (cartData.length === 0) {
+        contentDisplay.innerHTML = '<p class="empty-cart">购物车是空的，去添加商品吧～</p>';
+        return;
+      }
 
-    data.forEach((item) => {
-      const itemElem = document.createElement("div");
-      itemElem.classList.add("item", "cart-item"); // 关键：加上 cart-item 类名
-      itemElem.dataset.id = item.id; // 添加数据ID，方便删除时查找
+      const list = document.createElement("div");
+      list.classList.add("item-list");
 
-      // 选择按钮
-      const checkBox = document.createElement('input');
-      checkBox.type = 'checkbox';
-      checkBox.classList.add('cart-checkbox');
-      checkBox.addEventListener('change', () => {
-        const cartItem = cartData.find(c => c.id === item.id);
-        if (cartItem) cartItem.checked = checkBox.checked;
-        calculateTotal(cartData); // 选中状态变化时重新计算总价
+      // 给每个商品添加checked属性（用于选中计算）
+      cartData.forEach(item => {
+        item.checked = false;
       });
 
-      // 添加删除按钮
-      const deleteBtn = document.createElement('button');
-      deleteBtn.classList.add('delete-btn');
-      deleteBtn.innerHTML = '<i class="fa fa-times"></i>'; // 使用Font Awesome的叉号图标
-      deleteBtn.title = '删除商品';
-      deleteBtn.addEventListener('click', () => {
-        // 从DOM中移除商品元素
-        itemElem.remove();
+      cartData.forEach(item => {
+        // 创建商品元素
+        const itemElem = document.createElement("div");
+        itemElem.classList.add("item", "cart-item");
+        itemElem.dataset.id = item.recipe_id;
+
+        // 选择复选框
+        const checkBox = document.createElement('input');
+        checkBox.type = 'checkbox';
+        checkBox.classList.add('cart-checkbox');
+        checkBox.addEventListener('change', () => {
+          item.checked = checkBox.checked;
+          calculateTotal(cartData);
+        });
+
+        // 删除按钮
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('delete-btn');
+        deleteBtn.innerHTML = '<i class="fa fa-times"></i>';
+        deleteBtn.title = '删除商品';
+        deleteBtn.addEventListener('click', async () => {
+          if (!confirm('确定删除该商品吗？')) return;
+          
+          try {
+            const res = await fetch('http://localhost:3000/api/cart', {
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                user_id: user.id, 
+                recipe_id: item.recipe_id 
+              })
+            });
+            
+            const data = await res.json();
+            if (data.code === 200) {
+              // 从DOM中移除
+              itemElem.remove();
+              // 从数据中移除
+              const index = cartData.findIndex(c => c.recipe_id === item.recipe_id);
+              if (index !== -1) {
+                cartData.splice(index, 1);
+                calculateTotal(cartData);
+              }
+              // 如果购物车为空，显示空状态
+              if (cartData.length === 0) {
+                contentDisplay.innerHTML = '<p class="empty-cart">购物车是空的，去添加商品吧～</p>';
+              }
+            } else {
+              alert(data.msg);
+            }
+          } catch (err) {
+            console.error('删除失败', err);
+            alert('删除失败，请重试');
+          }
+        });
+
+        // 商品图片
+        const img = document.createElement("img");
+        img.src = `../img/${item.img}`;
+        img.alt = item.title;
+        img.classList.add("item-img");
+
+        // 商品信息（标题、作者、价格、数量）
+        const info = document.createElement("div");
+        info.classList.add("item-info");
+
+        const title = document.createElement("div");
+        title.classList.add("item-title");
+        title.textContent = item.title;
+
+        const desc = document.createElement("div");
+        desc.classList.add("item-desc");
         
-        // 从购物车数据中移除
-        const index = cartData.findIndex(c => c.id === item.id);
-        if (index !== -1) {
-          cartData.splice(index, 1);
-          calculateTotal(cartData); // 重新计算总价
+        // 价格显示
+        const priceSpan = document.createElement('span');
+        priceSpan.classList.add('price');
+        priceSpan.innerHTML = `<i class="yuan">¥</i>${item.price.toFixed(2)}`;
+
+        // 数量调整控件
+        const quantityWrapper = document.createElement('div');
+        quantityWrapper.classList.add('quantity-wrapper');
+
+        const minusBtn = document.createElement('button');
+        minusBtn.classList.add('quantity-btn');
+        minusBtn.textContent = '-';
+        minusBtn.addEventListener('click', async () => {
+          const newQty = item.quantity - 1;
+          if (newQty < 1) return;
+          await updateQuantity(item.recipe_id, newQty);
+          item.quantity = newQty;
+          quantityInput.value = newQty;
+          if (item.checked) calculateTotal(cartData);
+        });
+
+        const quantityInput = document.createElement('input');
+        quantityInput.classList.add('quantity-input');
+        quantityInput.type = 'number';
+        quantityInput.value = item.quantity;
+        quantityInput.addEventListener('input', async (e) => {
+          let newQty = parseInt(e.target.value) || 1;
+          newQty = Math.max(1, newQty); // 确保数量不小于1
+          await updateQuantity(item.recipe_id, newQty);
+          item.quantity = newQty;
+          e.target.value = newQty;
+          if (item.checked) calculateTotal(cartData);
+        });
+
+        const plusBtn = document.createElement('button');
+        plusBtn.classList.add('quantity-btn');
+        plusBtn.textContent = '+';
+        plusBtn.addEventListener('click', async () => {
+          const newQty = item.quantity + 1;
+          await updateQuantity(item.recipe_id, newQty);
+          item.quantity = newQty;
+          quantityInput.value = newQty;
+          if (item.checked) calculateTotal(cartData);
+        });
+
+        // 更新数量的辅助函数
+        async function updateQuantity(recipeId, quantity) {
+          try {
+            const res = await fetch('http://localhost:3000/api/cart/update', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                user_id: user.id, 
+                recipe_id: recipeId, 
+                quantity 
+              })
+            });
+            const data = await res.json();
+            if (data.code !== 200) alert(data.msg);
+          } catch (err) {
+            console.error('更新数量失败', err);
+            alert('更新失败，请重试');
+          }
         }
+
+        // 组装数量控件
+        quantityWrapper.append(minusBtn, quantityInput, plusBtn);
+        
+        // 右侧容器（数量 + 价格）
+        const rightContainer = document.createElement('span');
+        rightContainer.style.display = 'flex';
+        rightContainer.style.alignItems = 'center';
+        rightContainer.style.gap = '0.5rem';
+        rightContainer.append(quantityWrapper, priceSpan);
+        
+        // 组装描述区域（作者 + 右侧容器）
+        desc.append(document.createTextNode(item.author || '未知作者'), rightContainer);
+
+        // 组装商品信息
+        info.append(title, desc);
+        
+        // 组装整个商品项
+        itemElem.append(checkBox, img, info, deleteBtn);
+        list.appendChild(itemElem);
       });
 
-      // 1. 图片
-      const img = document.createElement("img");
-      img.src = `../img/${item.img}`;
-      img.alt = item.title;
-      img.classList.add("item-img");
-
-      // 2. 文字内容区域：书名 + 作者/价格 + 数量调整
-      const info = document.createElement("div");
-      info.classList.add("item-info");
-
-      // 2.1 书名
-      const title = document.createElement("div");
-      title.classList.add("item-title");
-      title.textContent = item.title;
-
-
-      // 2.2 作者 + 价格 + 数量调整
-      const desc = document.createElement("div");
-      desc.classList.add("item-desc");
-      // 先构造价格和数量调整的结构
-      const priceSpan = document.createElement('span');
-      priceSpan.classList.add('price');
-      priceSpan.innerHTML = `<i class="yuan">¥</i>${item.price}`;
-
-      const quantityWrapper = document.createElement('div');
-      quantityWrapper.classList.add('quantity-wrapper');
-
-      const minusBtn = document.createElement('button');
-      minusBtn.classList.add('quantity-btn');
-      minusBtn.textContent = '-';
-      minusBtn.addEventListener('click', () => adjustQuantity(item, -1, itemElem, cartData));
-
-      const quantityInput = document.createElement('input');
-      quantityInput.classList.add('quantity-input');
-      quantityInput.type = 'number';
-      quantityInput.value = 1; 
-      quantityInput.addEventListener('input', (e) => adjustQuantity(item, 0, itemElem, cartData, e.target.value));
-
-      const plusBtn = document.createElement('button');
-      plusBtn.classList.add('quantity-btn');
-      plusBtn.textContent = '+';
-      plusBtn.addEventListener('click', () => adjustQuantity(item, 1, itemElem, cartData));
-
-      quantityWrapper.append(minusBtn, quantityInput, plusBtn);
-
-      // 核心修改：把「数量」和「价格」换位置，并包裹到右侧容器
-      const rightContainer = document.createElement('span');
-      rightContainer.style.display = 'flex';
-      rightContainer.style.alignItems = 'center';
-      rightContainer.style.gap = '0.5rem'; // 数量和价格的间距
-      
-      rightContainer.append(quantityWrapper, priceSpan); // 数量在前，价格在后
-      desc.append(document.createTextNode(item.author), rightContainer); // 作者在左，数量价格在右
-      
-      // 组装文字区域
-      info.appendChild(title);
-      info.appendChild(desc);
-
-      // 3. 组装单项并存储数据
-      itemElem.append(checkBox, img, info, deleteBtn);
-      list.append(itemElem);
-
-      // 初始化购物车数据（含价格、数量）
-      cartData.push({
-        id: item.id,
-        price: parseFloat(item.price),
-        quantity: 1,
-        checked: false, // 默认未选中
-        title: item.title, // 关键：加入 title 字段！
-      });
-      });
-
-      // 4. 新增：结算栏
+      // 创建结算栏
       const checkoutBar = document.createElement('div');
       checkoutBar.classList.add('checkout-bar');
 
+      // 全选控件
       const selectAllWrapper = document.createElement('div');
       selectAllWrapper.classList.add('select-all-wrapper');
-
+      
       const selectAllInput = document.createElement('input');
       selectAllInput.type = 'checkbox';
       selectAllInput.id = 'selectAll';
-      selectAllInput.addEventListener('change', () => toggleSelectAll(cartData, selectAllInput.checked));
-
+      selectAllInput.addEventListener('change', () => {
+        toggleSelectAll(cartData, selectAllInput.checked);
+      });
+      
       const selectAllLabel = document.createElement('label');
       selectAllLabel.setAttribute('for', 'selectAll');
       selectAllLabel.textContent = '全选';
-
+      
       selectAllWrapper.append(selectAllInput, selectAllLabel);
 
+      // 总价和结算按钮
       const totalWrapper = document.createElement('div');
       totalWrapper.classList.add('total-wrapper');
-
+      
       const totalText = document.createElement('span');
       totalText.id = 'totalPrice';
-      totalText.textContent = `合计: ¥0`;
-
+      totalText.textContent = '合计: ¥0';
+      
       const checkoutBtn = document.createElement('button');
       checkoutBtn.classList.add('checkout-btn');
       checkoutBtn.textContent = '结算';
-      checkoutBtn.addEventListener('click', () => checkout(cartData));
-
+      checkoutBtn.addEventListener('click', async () => {
+        await checkout(cartData, user.id);
+      });
+      
       totalWrapper.append(totalText, checkoutBtn);
       checkoutBar.append(selectAllWrapper, totalWrapper);
 
-      // 5. 渲染购物车列表 + 结算栏
+      // 渲染购物车列表和结算栏
+      contentDisplay.innerHTML = "";
       contentDisplay.append(list, checkoutBar);
-
+      
       // 初始化总价计算
       calculateTotal(cartData);
-  } else if (type === "recipes") {
+
+    } catch (err) {
+      console.error('获取购物车失败', err);
+      contentDisplay.innerHTML = '<p class="error-message">获取购物车失败，请刷新页面重试</p>';
+    }
+  } 
+  else if (type === "recipes") {
+    // 我的食谱渲染（保持原样）
+    const data = [
+      { id: 1, img: "carousel1.png", title: "开水炖蛋" },
+      { id: 2, img: "carousel2.png", title: "灌汤包" },
+      { id: 3, img: "carousel3.png", title: "肉酱面" },
+      { id: 4, img: "carousel4.png", title: "三文鱼波奇碗" },
+      { id: 5, img: "carousel1.png", title: "开水炖蛋" },
+      { id: 6, img: "carousel2.png", title: "灌汤包" }
+    ];
+
     const grid = document.createElement("div");
     grid.classList.add("recipes-grid");
 
@@ -327,35 +471,43 @@ function renderContent(type) {
       grid.appendChild(card);
     });
 
+    contentDisplay.innerHTML = "";
     contentDisplay.appendChild(grid);
   }
 }
 
 // 页面加载完成后执行（修改初始化逻辑）
 document.addEventListener("DOMContentLoaded", function () {
-  // 初始化用户信息
+  console.log('DOMContentLoaded in mine.js'); // 调试日志
+  
+  // 立即更新用户信息
   updateMyPageUserInfo();
-  
-  // 检查登录状态
-  const isLoggedIn = checkLogin();
-  
-  // 1. 找到“历史记录”对应的图标
-  const historyIcon = document.querySelector(
-    '.func-item[data-type="history"] i'
-  );
 
-  // 2. 已登录状态才初始化内容
-  if (isLoggedIn && historyIcon) {
-    historyIcon.classList.add("active");
-    renderContent("history");
-  } else {
-    // 未登录状态显示提示
-    contentDisplay.innerHTML = '<p class="login-prompt">请先登录以使用更多功能</p>';
-  }
+  // 确保DOM完全加载后再执行用户状态检查
+  setTimeout(() => {
+    const user = getCurrentUser();
+    console.log('Delayed check - user:', user); // 调试日志
+    
+    // 1. 找到“历史记录”对应的图标
+    const historyIcon = document.querySelector(
+      '.func-item[data-type="history"] i'
+    );
+
+    // 2. 已登录状态才初始化内容
+    if (user && historyIcon) {
+      historyIcon.classList.add("active");
+      renderContent("history");
+    } else {
+      // 未登录状态显示提示
+      const contentDisplay = document.getElementById("contentDisplay");
+      if (contentDisplay) {
+        contentDisplay.innerHTML = '<p class="login-prompt">请先登录以使用更多功能</p>';
+      }
+    }
+  },100);
 });
 
-// 获取所有功能按钮的图标元素
-const funcIcons = document.querySelectorAll(".func-item i");
+
 
 // 给每个图标绑定点击事件
 funcIcons.forEach((icon) => {
@@ -456,30 +608,41 @@ function calculateTotal(cartData) {
   return total; // 方便其他地方调用时获取总价
 }
 
-// 结算逻辑（增强版本）
-function checkout(cartData) {
-  // 1. 筛选选中的商品
+// 结算逻辑
+async function checkout(cartData, userId) {
+  // 筛选选中的商品
   const selectedItems = cartData.filter(item => item.checked);
   if (selectedItems.length === 0) {
     alert('请选择至少一件商品！');
     return;
   }
 
- // 2. 生成结算信息（关键：用 item.title 获取商品名称）
- const orderDetails = selectedItems.map(item => {
-  return `${item.title} x ${item.quantity} 单价: ¥${item.price.toFixed(2)}`;
-}).join('\n');
+  try {
+    // 调用创建订单API
+    const res = await fetch('http://localhost:3000/api/orders/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: userId,
+        items: selectedItems.map(item => ({
+          recipe_id: item.recipe_id,
+          quantity: item.quantity
+        }))
+      })
+    });
 
-// 3. 计算总计金额
-const total = selectedItems.reduce((sum, item) => {
-  return sum + (item.price * item.quantity);
-}, 0);
-
-  // 4. 显示结算结果
-  alert(`结算成功！\n\n${orderDetails}\n\n总计: ¥${total.toFixed(2)}`);
-  
-  // 5. 可选：清空已结算商品
-  // clearSelectedItems(cartData);
+    const data = await res.json();
+    if (data.code === 200) {
+      alert('订单创建成功！即将跳转到订单页面');
+      // 跳转到订单页面
+      window.location.href = 'order.html';
+    } else {
+      alert(`创建订单失败：${data.msg}`);
+    }
+  } catch (err) {
+    console.error('创建订单失败', err);
+    alert('创建订单失败，请重试');
+  }
 }
 
 // 可选：清空已结算商品的辅助函数
@@ -494,10 +657,34 @@ function clearSelectedItems(cartData) {
 
 
 function updateMyPageUserInfo() {
+  console.log('updateMyPageUserInfo called'); // 调试日志
   const container = document.getElementById('userInfoContainer');
+  if (!container) {
+    console.error('userInfoContainer not found');
+    return;
+  }
 
   const user = getCurrentUser();
+  console.log('Current user:', user); // 调试日志
+
+  // 清除所有可能的事件监听器，避免重复绑定
+  const unloggedTip = container.querySelector('#unloggedTip');
+  if (unloggedTip) {
+    unloggedTip.onclick = null; // 清除旧的事件
+    unloggedTip.addEventListener('click', () => {
+      localStorage.setItem('redirectAfterLogin', window.location.href);
+      jumpTo('login.html');
+    });
+  }
+  
+  const logoutBtn = container.querySelector('#logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.onclick = null; // 清除旧的事件
+    logoutBtn.addEventListener('click', logout);
+  }
+
   if (user) {
+    console.log('User is logged in'); // 调试日志
     // 已登录：显示头像、用户名、退出按钮
     container.querySelector('.unlogged-avatar').style.display = 'none';
     container.querySelector('.unlogged-text').style.display = 'none';
@@ -505,14 +692,15 @@ function updateMyPageUserInfo() {
     container.querySelector('.logged-text').style.display = 'block';
     container.querySelector('#logoutBtn').style.display = 'block';
     // 设置用户名（若有真实用户名，替换 user.username 即可）
-    container.querySelector('#loggedUsername').textContent = user.username;
+    container.querySelector('#loggedUsername').textContent = user.username || '用户';
     // 退出按钮绑定事件
-    container.querySelector('#logoutBtn').addEventListener('click', () => {
-      logout();
-      // 退出后重新更新“我的”页面显示（延迟保证 localStorage 已清除）
-      setTimeout(updateMyPageUserInfo, 500);
-    });
+    // container.querySelector('#logoutBtn').addEventListener('click', () => {
+    //   logout();
+    //   // 退出后重新更新“我的”页面显示（延迟保证 localStorage 已清除）
+    //   setTimeout(updateMyPageUserInfo, 500);
+    // });
   } else {
+    console.log('User is not logged in'); // 调试日志
     // 未登录：显示默认提示，点击“请先登录”跳转
     container.querySelector('.logged-avatar').style.display = 'none';
     container.querySelector('.logged-text').style.display = 'none';
@@ -520,12 +708,17 @@ function updateMyPageUserInfo() {
     container.querySelector('.unlogged-avatar').style.display = 'block';
     container.querySelector('.unlogged-text').style.display = 'block';
     // 绑定“请先登录”点击事件
-    container.querySelector('#unloggedTip').addEventListener('click', () => {
-      // 记录当前页面，登录后返回
-      localStorage.setItem('redirectAfterLogin', window.location.href);
-      jumpTo('login.html');
-    });
+    // container.querySelector('#unloggedTip').addEventListener('click', () => {
+    //   // 记录当前页面，登录后返回
+    //   localStorage.setItem('redirectAfterLogin', window.location.href);
+    //   jumpTo('login.html');
+    // });
   }
+
+  // 强制重绘，避免浏览器渲染问题
+  container.style.display = 'none';
+  container.offsetHeight; // 触发重排
+  container.style.display = '';
 }
 
 // “我的”页面加载时自动执行

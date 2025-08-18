@@ -108,7 +108,7 @@
         .then(data => {
             if (data.code === 200) {
             // 保存用户信息
-            localStorage.setItem('userInfo', JSON.stringify(data.data));
+            localStorage.setItem('currentUser', JSON.stringify(data.data));
             // 登录成功后，跳回之前的页面（通过redirectAfterLogin方法）
             showToast('登录成功，正在跳转...');
             setTimeout(redirectAfterLogin, 1000); // 延迟1秒跳转，让用户看到提示

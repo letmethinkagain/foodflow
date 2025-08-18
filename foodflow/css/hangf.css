@@ -61,7 +61,7 @@ body {
   left: 0;
   right: 0;
   z-index: 999;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color:  rgba(255, 255, 255, 0.95);
   box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
 }
 
@@ -71,7 +71,7 @@ body {
   left: 0;
   right: 0;
   z-index: 999;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color:  rgba(255, 255, 255, 0.95);
   box-shadow: 0 -0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
 }
 
@@ -116,7 +116,7 @@ body {
   width: 100%;
   padding: 0.5rem 0.75rem;
   padding-left: 2.1875rem;
-  border: 0.0625rem solid #ddd;
+  border: 0.0625rem solid rgba(255, 85, 85, 0.35);
   border-radius: 1.25rem;
   font-size: 0.875rem;
 }
@@ -124,7 +124,7 @@ body {
 .search-icon {
   position: absolute;
   left: 0.75rem;
-  color: #2b2b2b;
+  color: #ff7a7a;
 }
 
 .cart-login {
@@ -134,7 +134,7 @@ body {
 
 .cart-icon {
   display: inline-block;
-  color: #7c7c7c;
+  color: #ff7a7a;
   font-size: 1.125rem;
   margin-right: 0.9375rem;
   height: 2.7143rem;
@@ -158,15 +158,16 @@ body {
 .logged-user {
   display: flex;
   align-items: center;
-  color: #333;
+  color: #e04a4a;
   font-size: 0.875rem;
 }
 .avatar {
   font-weight: bold;
-  border: #7c7c7c 0.0625rem solid;
+  border: rgb(255, 122, 122,0.5) 0.0625rem solid;
   border-radius: 2rem;
   height: 2.5rem;
   width: 2.5rem;
+  line-height: 2.5rem;
   text-align: center;
   padding: auto;
 }
@@ -203,7 +204,7 @@ body {
 }
 
 .footer-nav li a.active {
-  color: #ff6b6b;
+  color: #ff7a7a;
 }
 
 
@@ -226,11 +227,11 @@ body {
 /* 弹窗内容容器样式（保持原有圆角和阴影） */
 .login-modal > div {
   width: 100%;
-  max-width: 300px; /* 限制最大宽度 */
+  max-width: 18.75rem; /* 限制最大宽度 */
   background-color: white;
   border-radius: 0.75rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* 增强阴影感 */
+  box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.15); /* 增强阴影感 */
 }
 
 /* 弹窗按钮通用样式优化 */

@@ -7,7 +7,7 @@
     font-size: 2rem;
 }
 .bt{
-    margin-top: 32px;
+    margin-top: 2rem;
 }
 .agree{
     display: flex;
@@ -22,7 +22,7 @@
 
 .mt{
     padding: 0.4375rem 0 0.875rem 0;
-    border-bottom: #999 1px dashed;
+    border-bottom: #999 0.0625rem dashed;
 }
 .extra{
     padding: 0.9375rem 0;
