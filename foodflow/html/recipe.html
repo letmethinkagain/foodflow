@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>食谱 - FOOD FLOW</title>
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/hangf.css" />
+    <link rel="stylesheet" href="../css/recipe.css" />
+    <!-- <link rel="stylesheet" href="css/normalize.css"> -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 顶部固定导航 -->
+    <header class="header fixed-top">
+      <div class="header-inner">
+        <div class="back-btn" onclick="goBack()">
+          <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </div> 
+        <div class="search-box">
+          <input type="text" placeholder="搜索" />
+          <span class="search-icon" onclick="searchOrder()"><i class="fa fa-search"></i></span>
+          <span class="search-tip" id="searchTip"></span>
+        </div>
+        <!-- 三个点：点击触发登录态检查 -->
+        <div class="more-icon" onclick="checkLoginThenShowMore()">
+          <i class="fa fa-ellipsis-v"></i>
+          <!-- 收藏等操作面板（默认隐藏） -->
+          <div class="more-options" style="display: none;">
+            <span onclick="addToFavorite()">收藏</span>
+          </div>
+        </div>
+      </div>
+  </header>
+
+  <!-- 主体内容区域 -->
+  <main class="main-content recipe-detail">
+    <!-- 在图片滑动区上方添加用户信息栏 -->
+<div class="user-info-bar">
+    <div class="user-profile">
+      <img src="../img/carousel1.png" alt="上传者头像" class="avatar">
+      <span class="user-name">美食达人</span>
+    </div>
+    <button class="follow-btn" onclick="handleFollow()">关注</button>
+  </div>
+
+
+    <!-- 图片滑动区 -->
+    <div class="image-slider">
+      <div class="slider-wrapper"
+            ontouchstart="touchStart(event)" 
+            ontouchmove="touchMove(event)" 
+            ontouchend="touchEnd(event)">
+        <img src="../img/carousel1.png" alt="步骤1" class="slider-img"/>
+        <img src="../img/carousel2.png" alt="步骤2" class="slider-img"/>
+        <img src="../img/carousel3.png" alt="步骤3" class="slider-img"/>
+      </div>
+      <!-- 小点指示器 -->
+      <div class="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+    <!-- 食谱标题与内容 -->
+    <h2 class="recipe-title">【食谱名】</h2>
+    <div class="recipe-content">
+      <p>具体食谱内容文字...</p>
+      <p>步骤1：准备食材</p>
+      <p>步骤2：烹饪处理</p>
+      <p>步骤3：装盘享用</p>
+    </div>
+
+    <!-- 评论区 -->
+    <div class="comment-section">
+      <!-- 发布评论（登录态控制） -->
+      <div class="comment-input" onclick="checkLoginThenComment()">
+        <img src="../img/carousel1.png" alt="用户头像" class="user-avatar"/>
+        <input type="text" placeholder="分享你的想法吧" id="commentInput"/>
+        <button class="comment-btn" onclick="submitComment()">发送</button>
+      </div>
+
+      <!-- 评论列表 -->
+      <div class="comments">
+        <div class="comment-item">
+          <img src="../img/carousel1.png" alt="用户1" class="user-avatar"/>
+          <div class="comment-info">
+            <span class="username">用户1</span>
+            <p class="comment-text">这道菜看起来很棒！</p>
+            <div class="like-area">
+              <i class="fa fa-thumbs-up" onclick="likeComment(1)" data-liked="false"></i>
+              <span class="like-count" id="likeCount1">999</span>
+            </div>
+          </div>
+        </div>
+        <div class="comment-item">
+          <img src="../img/carousel1.png" alt="用户2" class="user-avatar"/>
+          <div class="comment-info">
+            <span class="username">用户2</span>
+            <p class="comment-text">收藏了，周末试试～</p>
+            <div class="like-area">
+              <i class="fa fa-thumbs-up" onclick="likeComment(2)" data-liked="false"></i>
+              <span class="like-count" id="likeCount2">888</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部固定导航 -->
+  <footer class="footer fixed-bottom">
+    <ul class="footer-nav">
+      <li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
+      <li><a href="community.html" class="active"><i class="fa fa-comments"></i> 社区</a></li>
+      <li><a href="message.html"  id="messageLink"><i class="fa fa-envelope"></i> 消息</a></li>
+      <li><a href="mine.html"><i class="fa fa-user"></i> 我的</a></li>
+    </ul>
+  </footer>
+
+  <!-- 未登录弹窗（通用） -->
+  <div class="login-popup" id="loginPopup" style="display: none;">
+    <div class="popup-content">
+      <p>您还未登录，请先登录</p>
+    </div>
+  </div>
+
+  <!-- 引入基础 JS（后续可补充交互逻辑） -->
+  <script src="../js/common.js"></script>
+  <script src="../js/recipe.js"></script>
+  <script src="../js/server.js"></script>
+</body>
+
+</html>
