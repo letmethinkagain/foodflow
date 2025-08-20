@@ -9,11 +9,7 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
   button.addEventListener('click', async (e) => {
     e.preventDefault(); // 阻止默认行为（如跳转）
     e.stopPropagation(); // 阻止事件冒泡
-
-    // 检查按钮是否在<form>内，如果是则阻止表单提交
-    if (button.closest('form')) {
-      e.stopImmediatePropagation(); // 阻止其他可能的事件监听器
-    }
+    e.stopImmediatePropagation();
 
     const user = getCurrentUser();
     if (!user) {
@@ -21,11 +17,17 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
       localStorage.setItem('redirectAfterLogin', window.location.href);
       setTimeout(() => {
         window.location.href = 'login.html';
-      }, 5000); // 延迟跳转，让提示可见
+      }, 1500); // 延迟跳转，让提示可见
       return;
     }
 
-    const recipeId = button.closest('.recipe-item').dataset.id;
+    const recipeItem = button.closest('.recipe-item');
+    if (!recipeItem) {
+      showToast('获取商品信息失败', true);
+      return;
+    }
+    
+    const recipeId = recipeItem.dataset.id;
     try {
       const res = await fetch('http://localhost:3000/api/cart/add', {
         method: 'POST',
@@ -33,13 +35,56 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
         body: JSON.stringify({ user_id: user.id, recipe_id: parseInt(recipeId) })
       });
       const data = await res.json();
-      showToast(data.msg); // 提示"添加成功"或错误信息
+      if (res.ok) {
+        showToast(data.msg || '添加成功');
+        // 关键：局部更新购物车UI，不刷新页面
+        updateCartUI();
+      } else {
+        showToast(data.msg || '添加失败', true);
+      }
     } catch (err) {
       console.error('添加失败', err);
-      showToast('添加失败，请重试', true);
+      showToast('网络错误，请重试', true);
     }
   });
 });
+
+// 新增：局部更新购物车UI的函数
+async function updateCartUI() {
+  try {
+    // 1. 更新购物车数量标记（如导航栏的购物车图标旁的数字）
+    const cartCountEl = document.querySelector('.cart-count');
+    if (cartCountEl) {
+      // 从服务器获取最新购物车数量
+      const res = await fetch(`http://localhost:3000/api/cart/count?user_id=${user.id}`);
+      const data = await res.json();
+      if (data.count !== undefined) {
+        cartCountEl.textContent = data.count;
+        // 添加数字变化动画，提升体验
+        cartCountEl.classList.add('animate-pulse');
+        setTimeout(() => cartCountEl.classList.remove('animate-pulse'), 500);
+      }
+    }
+
+    // 2. 如果当前在"我的"页面的购物车标签下，刷新购物车列表
+    const isMinePage = window.location.pathname.includes('mine.html');
+    const activeTab = document.querySelector('.func-item[data-type="cart"] i.active');
+    
+    if (isMinePage && activeTab) {
+      // 找到内容展示区域
+      const contentDisplay = document.getElementById('contentDisplay');
+      if (contentDisplay) {
+        // 显示加载状态
+        contentDisplay.innerHTML = '<div class="loading">更新购物车中...</div>';
+        // 重新渲染购物车
+        setTimeout(() => renderContent('cart'), 300);
+      }
+    }
+  } catch (err) {
+    console.error('更新购物车UI失败', err);
+  }
+}
+
 
 
 // 轮播图基础功能

@@ -1,5 +1,20 @@
 .scrollable-content{
-  margin-top: 0.5rem;
+  width:95%;
+  height: calc(100vh - 9.125rem);
+  margin: 0.5rem auto;
+  padding: 0.9375rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);
+  overflow: hidden;
+
+   /* 核心：限制高度并添加滚动 */
+   max-height: calc(100vh - 8.125rem); /* 减去头部、功能区和底部导航的高度 */
+   overflow-y: auto; /* 垂直滚动 */
+   -webkit-overflow-scrolling: touch; /* 移动端平滑滚动 */
 }
 
 /* 用户信息及功能区样式 */
@@ -15,7 +30,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 0.9375rem;
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
   border-radius: 3.125rem 0.25rem 0.25rem 3.125rem;
 }
 

@@ -42,12 +42,14 @@
   </header>
 
   <!-- 主体内容区域 -->
-  <main class="main-content recipe-detail">
+  <main class="scrollable-content main-content recipe-detail">
     <!-- 在图片滑动区上方添加用户信息栏 -->
 <div class="user-info-bar">
     <div class="user-profile">
       <img src="../img/carousel1.png" alt="上传者头像" class="avatar">
       <span class="user-name">美食达人</span>
+      <!-- 隐藏的作者ID，值为数据库中“美食达人”的实际ID -->
+      <input type="hidden" id="authorId" value="3">
     </div>
     <button class="follow-btn" onclick="handleFollow()">关注</button>
   </div>
@@ -114,6 +116,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </main>
 

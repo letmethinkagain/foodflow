@@ -63,6 +63,7 @@ function showMoreOptions(elem) {
   const moreOptions = elem.nextElementSibling;
   // 点击其他地方关闭下拉菜单
   document.addEventListener('click', function closeMenu(e) {
+    e.stopPropagation(); // 阻止事件扩散
     if (!elem.contains(e.target) && !moreOptions.contains(e.target)) {
       moreOptions.style.display = 'none';
       document.removeEventListener('click', closeMenu);
@@ -80,7 +81,13 @@ function viewComment(orderId) {
 }
 
 // 删除订单
-async function deleteOrder(orderId) {
+async function deleteOrder(orderId,event) {
+  // 新增：阻止事件传播和默认行为
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  
   const user = getCurrentUser();
   if (!user) return;
   
@@ -150,9 +157,8 @@ async function buyAgain(recipeId) {
     
     const data = await response.json();
     if (data.code === 200) {
-      if (confirm('商品已加入购物车，是否前往购物车查看？')) {
-        window.location.href = 'mine.html';
-      }
+      // 仅提示，不强制跳转（避免刷新）
+      alert('商品已重新加入购物车');
     } else {
       alert(`添加失败：${data.msg}`);
     }

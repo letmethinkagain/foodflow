@@ -88,6 +88,18 @@ const db = new sqlite3.Database('./mydb.db', (err) => {
       else console.log('订单项表初始化成功');
     });
 
+    // 4. 关注表（关联用户和被关注用户）
+    db.run(`CREATE TABLE IF NOT EXISTS follows (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      follower_id INTEGER NOT NULL,  -- 关注者ID（当前用户）
+      following_id INTEGER NOT NULL, -- 被关注者ID（食谱作者）
+      FOREIGN KEY (follower_id) REFERENCES users(id),
+      FOREIGN KEY (following_id) REFERENCES users(id),
+      UNIQUE(follower_id, following_id) -- 避免重复关注
+    )`, (err) => {
+      if (err) console.error('创建关注表失败：', err.message);
+      else console.log('关注表初始化成功');
+    });
 });
 
 // 验证用户是否登录的中间件（放在所有接口前）
@@ -175,11 +187,6 @@ app.post('/api/register', (req, res) => {
       res.json({ code: 200, msg: '注册成功', data: { id: this.lastID } });
     });
   });
-
-// 启动服务器
-app.listen(port, () => {
-    console.log(`后端服务运行在 http://localhost:${port}`);
-});
 
 // 新增：查询所有用户数据的接口（仅开发环境使用，上线后删除）
 // 重启后端服务，访问 http://localhost:3000/api/test/db：
@@ -359,3 +366,101 @@ app.delete('/api/orders', checkLogin, (req, res) => {
     });
 });
 
+
+
+
+// 关注接口
+app.post('/api/follow', checkLogin, (req, res) => {
+  const { follower_id, following_id } = req.body;
+
+  // 打印接收到的参数
+  // console.log('接收参数：', { follower_id, following_id });
+
+  // 检查是否已关注
+  db.get("SELECT * FROM follows WHERE follower_id = ? AND following_id = ?", [follower_id, following_id], (err, row) => {
+      if (err) {
+        console.error('数据库查询错误:', err); // 打印详细错误
+        return res.json({ code: 500, msg: '数据库查询失败' });
+      }
+      if (row) {
+        // 取消关注逻辑
+        db.run("DELETE FROM follows WHERE follower_id = ? AND following_id = ?", [follower_id, following_id], (delErr) => {
+          if (delErr) {
+            console.error('取消关注错误:', delErr);
+            return res.json({ code: 500, msg: '取消关注失败' });
+          }
+          res.json({ code: 200, msg: '取消关注成功' });
+        });
+      } else {
+        // 关注逻辑
+        db.run("INSERT INTO follows (follower_id, following_id) VALUES (?, ?)", [follower_id, following_id], (insErr) => {
+          if (insErr) {
+            console.error('关注插入错误:', insErr);
+            // 常见错误如 UNIQUE 约束冲突（重复关注）、外键约束失败（用户不存在）
+            if (insErr.message.includes('UNIQUE constraint failed')) {
+              return res.json({ code: 400, msg: '已关注过该用户' });
+            }
+            if (insErr.message.includes('FOREIGN KEY constraint failed')) {
+              return res.json({ code: 400, msg: '关注对象或当前用户不存在' });
+            }
+            return res.json({ code: 500, msg: '关注失败' });
+          }
+          res.json({ code: 200, msg: '关注成功' });
+        });
+      }
+  });
+});
+
+// 获取关注列表接口（确保正确关联用户表）
+app.get('/api/follow/list', checkLogin, (req, res) => {
+  const { user_id } = req.query;
+  console.log('当前用户ID:', user_id); // 确认传递的user_id正确
+
+  // 正确的关联查询
+  db.all(`
+      SELECT u.id, u.username, u.phone 
+      FROM follows f 
+      JOIN users u ON f.following_id = u.id 
+      WHERE f.follower_id = ?
+  `, [user_id], (err, rows) => {
+      if (err) {
+          console.error('查询关注列表失败:', err);
+          return res.json({ code: 500, msg: '服务器错误' });
+      }
+      console.log('查询结果:', rows); // 打印结果，确认是否有数据
+      res.json({ code: 200, data: rows });
+  });
+});
+
+// 检查是否已关注
+app.get('/api/checkFollow', checkLogin, (req, res) => {
+  const { follower_id, following_id } = req.query;
+  
+  // 验证参数
+  if (!follower_id || !following_id) {
+      return res.json({ code: 400, msg: '参数不完整' });
+  }
+
+  // 查询关注关系
+  db.get(
+      "SELECT * FROM follows WHERE follower_id = ? AND following_id = ?",
+      [follower_id, following_id],
+      (err, row) => {
+          if (err) {
+              console.error('查询关注状态失败:', err);
+              return res.json({ code: 500, msg: '服务器错误' });
+          }
+          // 存在记录则已关注，否则未关注
+          res.json({ 
+              code: 200, 
+              data: { isFollowed: !!row } 
+          });
+      }
+  );
+});
+
+
+// 启动服务器
+app.listen(port, () => {
+  console.log(`后端服务运行在 http://localhost:${port}`);
+});

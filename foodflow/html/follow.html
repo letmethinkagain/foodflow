@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>关注 - FOOD FLOW</title>
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/hangf.css" />
+    <link rel="stylesheet" href="../css/follow.css" />
+    <!-- <link rel="stylesheet" href="css/normalize.css"> -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 顶部固定导航 -->
+    <header class="header fixed-top">
+      <div class="header-inner">
+        <div class="back-btn" onclick="goBack()">
+          <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </div> 
+        <div class="head-text">我的好友</div>
+      </div>
+    </header>
+    
+    <!-- 中间滚动内容区域 -->
+    <main class="scrollable-content">
+        <!-- 标签切换 -->
+        <div class="tab-header">
+            <span class="tab active" onclick="switchTab('follow')">关注</span>
+            <span class="tab" onclick="switchTab('fans')">粉丝</span>
+        </div>
+        
+        <!-- 搜索框 -->
+        <div class="search-container">
+            <i class="fa fa-search search-icon"></i>
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="搜索关注的用户" 
+                class="search-input"
+            />
+        </div>
+        
+        <!-- 关注列表容器 -->
+        <div id="followList" class="list-container">
+            <!-- 动态内容将在这里渲染 -->
+        </div>
+        
+        <!-- 粉丝列表容器 -->
+        <div id="fansList" class="list-container" style="display: none;">
+            <div class="empty-state">
+                <i class="fa fa-users"></i>
+                <p>您还没有粉丝</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部固定导航 -->
+    <footer class="footer fixed-bottom">
+      <ul class="footer-nav">
+        <li>
+          <a href="index.html"><i class="fa fa-home"></i> 首页</a>
+        </li>
+        <li>
+          <a href="community.html"><i class="fa fa-comments"></i> 社区</a>
+        </li>
+        <li>
+          <a href="message.html" class="active"
+            ><i class="fa fa-envelope"></i> 消息</a
+          >
+        </li>
+        <li>
+          <a href="mine.html"><i class="fa fa-user"></i> 我的</a>
+        </li>
+      </ul>
+    </footer>
+
+    <script src="../js/follow.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/server.js"></script>
+  </body>
+</html>

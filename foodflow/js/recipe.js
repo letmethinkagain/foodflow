@@ -175,29 +175,152 @@ function submitComment() {
   }
 
 
-// 关注/取消关注功能（完善登录检查）
-function handleFollow() {
-    // 先检查登录状态，未登录直接显示登录弹窗
-    if (!checkLogin()) {
+  // 页面加载完成后检查关注状态
+window.addEventListener('load', () => {
+  // 检查登录状态
+  const currentUser = getCurrentUser();
+  const authorId = document.getElementById('authorId').value;
+  const followBtn = document.querySelector('.follow-btn');
+
+  if (!currentUser || !authorId) {
+      return; // 未登录或无作者ID，不检查
+  }
+
+  // 调用接口检查是否已关注
+  checkFollowStatus(currentUser.id, authorId)
+      .then(isFollowed => {
+          // 初始化按钮状态
+          if (isFollowed) {
+              followBtn.textContent = '已关注';
+              followBtn.classList.add('followed');
+          } else {
+              followBtn.textContent = '关注';
+              followBtn.classList.remove('followed');
+          }
+      });
+
+});
+
+/**
+ * 检查当前用户是否已关注目标用户
+ * @param {number} followerId - 当前登录用户ID（关注者）
+ * @param {number} followingId - 目标用户ID（被关注者）
+ * @returns {Promise<boolean>} - 是否已关注的状态
+ */
+function checkFollowStatus(followerId, followingId) {
+  // 1. 获取当前登录用户信息，确保已登录
+  const currentUser = getCurrentUser();
+  if (!currentUser || !currentUser.id) {
+      console.log('未登录或用户信息不完整，默认未关注');
+      return Promise.resolve(false);
+  }
+
+  // 2. 验证参数有效性（转为数字类型）
+  const fId = parseInt(followerId, 10);
+  const uId = parseInt(followingId, 10);
+  const userId = parseInt(currentUser.id, 10); // 登录用户ID（用于后端验证）
+
+  if (isNaN(fId) || isNaN(uId) || isNaN(userId)) {
+      console.error('用户ID格式错误（必须为数字）', {
+          followerId,
+          followingId,
+          currentUserId: currentUser.id
+      });
+      return Promise.resolve(false);
+  }
+
+  // 3. 构建请求URL（包含必要的登录凭证和查询参数）
+  const url = new URL('http://localhost:3000/api/checkFollow');
+  url.searchParams.append('user_id', userId); // 登录验证用
+  url.searchParams.append('follower_id', fId); // 关注者ID
+  url.searchParams.append('following_id', uId); // 被关注者ID
+
+  console.log('发起关注状态查询:', url.toString());
+
+  // 4. 发送请求并处理响应
+  return fetch(url.toString())
+      .then(response => {
+          // 处理HTTP层错误（如404、500）
+          if (!response.ok) {
+              throw new Error(`HTTP错误：状态码 ${response.status}`);
+          }
+          // 解析JSON响应（防止后端返回非JSON数据）
+          return response.json().catch(jsonErr => {
+              throw new Error(`响应格式错误：${jsonErr.message}`);
+          });
+      })
+      .then(data => {
+          // 处理业务逻辑错误（如code非200）
+          if (data.code !== 200) {
+              console.warn('查询关注状态失败（业务错误）:', data.msg);
+              return false;
+          }
+          // 返回实际关注状态（确保是布尔值）
+          return Boolean(data.data?.isFollowed);
+      })
+      .catch(error => {
+          // 捕获所有异常（网络错误、解析错误等）
+          console.error('查询关注状态时发生错误:', error.message);
+          return false; // 出错时默认视为未关注
+      });
+}
+
+
+  function handleFollow() {
+    const currentUser = getCurrentUser();
+    const authorId = document.getElementById('authorId').value;
+    const followBtn = document.querySelector('.follow-btn');
+    
+    if (!currentUser) {
       showLoginModal();
       return;
     }
-    
-    const followBtn = document.querySelector('.follow-btn');
-    const isFollowed = followBtn.classList.contains('followed');
-    
-    if (isFollowed) {
-      // 取消关注
-      followBtn.classList.remove('followed');
-      followBtn.textContent = '关注';
-      showToast('已取消关注');
-    } else {
-      // 关注
-      followBtn.classList.add('followed');
-      followBtn.textContent = '已关注';
-      showToast('关注成功');
-    }
-    
-    // 实际项目中这里会调用接口保存关注状态
-  }
   
+    // 强制转换为数字（避免类型问题）
+    const followingId = parseInt(authorId);
+    if (isNaN(followingId)) {
+      showToast('作者ID无效', true);
+      return;
+    }
+
+    // 禁用按钮防止重复点击
+    followBtn.disabled = true;
+    followBtn.textContent = '处理中...';
+  
+    fetch('http://localhost:3000/api/follow', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        user_id: currentUser.id, // 新增：与后端checkLogin中间件的参数名匹配
+        follower_id: currentUser.id, 
+        following_id: followingId 
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.code === 200) {
+        // const followBtn = document.querySelector('.follow-btn');
+        // followBtn.textContent = data.msg.includes('关注') ? '已关注' : '关注';
+        // followBtn.classList.toggle('followed', data.msg.includes('关注'));
+        showToast(data.msg);
+        
+        // 根据返回消息更新按钮状态
+        if (data.msg.includes('关注成功')) {
+            followBtn.textContent = '已关注';
+            followBtn.classList.add('followed');
+        } else if (data.msg.includes('取消关注成功')) {
+            followBtn.textContent = '关注';
+            followBtn.classList.remove('followed');
+        }
+      } else {
+        showToast(data.msg, true);
+      }
+    })
+    .catch(err => {
+      console.error('关注请求错误:', err);
+      showToast('网络错误，关注失败', true);
+    })
+    .finally(() => {
+        followBtn.disabled = false;
+    });
+  }

@@ -248,10 +248,13 @@ async function renderContent(type) {
 
         // 删除按钮
         const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button'; // 明确指定按钮类型
         deleteBtn.classList.add('delete-btn');
         deleteBtn.innerHTML = '<i class="fa fa-times"></i>';
         deleteBtn.title = '删除商品';
-        deleteBtn.addEventListener('click', async () => {
+        deleteBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           if (!confirm('确定删除该商品吗？')) return;
           
           try {
@@ -332,6 +335,7 @@ async function renderContent(type) {
         quantityInput.classList.add('quantity-input');
         quantityInput.type = 'number';
         quantityInput.value = item.quantity;
+        quantityInput.min = 1; // 限制最小为1
         quantityInput.addEventListener('input', async (e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -485,6 +489,83 @@ async function renderContent(type) {
     contentDisplay.appendChild(grid);
   }
 }
+
+// 获取购物车数据并渲染
+async function renderCart() {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  try {
+    const res = await fetch(`http://localhost:3000/api/cart?user_id=${user.id}`);
+    const data = await res.json();
+
+    if (data.code !== 200) {
+      contentDisplay.innerHTML = `<p>获取购物车失败：${data.msg}</p>`;
+      return;
+    }
+
+    const cartItems = data.data;
+    if (cartItems.length === 0) {
+      contentDisplay.innerHTML = '<p>购物车空空如也</p>';
+      return;
+    }
+
+    // 动态渲染购物车
+    contentDisplay.innerHTML = cartItems.map(item => `
+      <div class="cart-item" data-id="${item.id}">
+        <img src="../img/${item.img}" alt="${item.title}" />
+        <p>${item.title} - ¥${item.price}</p>
+        <div class="cart-ops">
+          <button class="decrease" data-id="${item.id}">-</button>
+          <span class="quantity">${item.quantity}</span>
+          <button class="increase" data-id="${item.id}">+</button>
+          <button class="delete" data-id="${item.id}">删除</button>
+        </div>
+      </div>
+    `).join("");
+
+    // 给加减按钮绑定事件
+    document.querySelectorAll(".increase").forEach(btn => {
+      btn.addEventListener("click", () => updateCartQuantity(btn.dataset.id, 1));
+    });
+    document.querySelectorAll(".decrease").forEach(btn => {
+      btn.addEventListener("click", () => updateCartQuantity(btn.dataset.id, -1));
+    });
+    document.querySelectorAll(".delete").forEach(btn => {
+      btn.addEventListener("click", () => deleteCartItem(btn.dataset.id));
+    });
+
+  } catch (err) {
+    console.error(err);
+    contentDisplay.innerHTML = '<p>购物车加载失败</p>';
+  }
+}
+
+// 更新数量
+async function updateCartQuantity(itemId, delta) {
+  const user = getCurrentUser();
+  if (!user) return;
+  await fetch("http://localhost:3000/api/cart/update", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: user.id, cart_id: itemId, delta })
+  });
+  renderCart(); // 🔑 只刷新购物车部分
+}
+
+// 删除商品
+async function deleteCartItem(itemId) {
+  const user = getCurrentUser();
+  if (!user) return;
+  await fetch("http://localhost:3000/api/cart/delete", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: user.id, cart_id: itemId })
+  });
+  renderCart();
+}
+
+
 
 // 页面加载完成后执行（修改初始化逻辑）
 document.addEventListener("DOMContentLoaded", function () {
@@ -643,9 +724,9 @@ async function checkout(cartData, userId) {
 
     const data = await res.json();
     if (data.code === 200) {
-      alert('订单创建成功！即将跳转到订单页面');
+      alert('订单创建成功！');
       // 跳转到订单页面
-      window.location.href = 'order.html';
+      // window.location.href = 'order.html';
     } else {
       alert(`创建订单失败：${data.msg}`);
     }

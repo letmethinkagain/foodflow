@@ -1,0 +1,169 @@
+/* 头部样式 */
+.header-inner {
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.back-btn {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.2rem; 
+    color: #ff7a7a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.back-btn .fa {
+    font-size: 2rem;
+}
+
+.head-text {
+    color: #ff7a7a;
+    margin-top: 0.1rem;
+}
+
+/* 标签切换样式 */
+.tab-header {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    background-color: white;
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    padding: 0.8rem 0;
+    font-size: 1rem;
+    color: #666;
+    cursor: pointer;
+    position: relative;
+}
+
+.tab.active {
+    color: #ff7a7a;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #ff7a7a;
+}
+
+/* 搜索框样式 */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: white;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.search-icon {
+    color: #ccc;
+    padding: 0 0.85rem;
+    position: absolute;
+    left: 0.5rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.7rem 2.5rem 0.7rem 2.5rem;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    outline: none;
+    font-size: 0.9rem;
+    left: -2rem;
+}
+
+/* 列表容器样式 */
+.scrollable-content {
+    margin-top: -0.5rem;
+    margin-bottom: 0;
+    padding-top: 0rem; /* 适配顶部导航 */
+    padding-bottom: 0rem; /* 适配底部导航 */
+}
+
+.list-container {
+    background-color: white;
+    min-height: calc(100vh - 10rem);
+}
+
+/* 列表项样式 */
+.list-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.2rem;
+}
+
+.phone {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.unfollow-btn {
+    padding: 0.4rem 1rem;
+    background-color: #f5f5f5;
+    color: #666;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.unfollow-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* 状态提示样式 */
+.loading, .empty, .error {
+    text-align: center;
+    padding: 2rem;
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}

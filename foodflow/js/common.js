@@ -219,7 +219,7 @@ function updateHeaderUserAction() {
             if (checkLogin()) {
                 // 已登录：标记跳转来源，跳转到我的页面
                 localStorage.setItem('fromCart', 'true');
-                jumpWithTip('mine.html', '前往我的购物车', 5000);
+                jumpWithTip('mine.html', '前往我的购物车', 2000);
             } else {
                 // 未登录：显示登录弹窗
                 showLoginModal();

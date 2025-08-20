@@ -23,6 +23,7 @@
     /* 可根据需要调整位置等 */
     display: flex;
     align-items: center; 
+    margin-right: 0.5rem;
   }
 
   .more-options {
@@ -114,6 +115,11 @@
     color: #666;
   }
   
+.follow-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
   
 
 
@@ -232,3 +238,4 @@
   .fa-thumbs-up.liked {
     color: #ff6b6b;
   }
+

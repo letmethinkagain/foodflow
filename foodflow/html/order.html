@@ -34,7 +34,8 @@
             ><i class="fa fa-search"></i
           ></span>
           <span class="search-tip" id="searchTip"></span>
-          <span class="more-icon" onclick="showMoreSearchOptions()">···</span> 
+          <span class="more-icon" onclick="showMoreSearchOptions()">
+            <i class="fa fa-ellipsis-v"></i></span> 
         </div>
       </div>
 
@@ -56,7 +57,7 @@
       
       <!-- 订单列表 -->
       <section class="order-list">
-        <article class="order-item">
+        <article class="order-item" data-id="1">
           <div class="order-img">
             <!-- 实际可替换为真实食谱图片 -->
             <img src="../img/随园食单40_6.jpg" alt="食谱图片" />
@@ -69,12 +70,12 @@
           </div>
           <div class="order-more" onclick="showMoreOptions(this)">更多</div>
           <div class="more-options" style="display: none">
-            <button onclick="viewComment()">查看评价</button>
-            <button onclick="deleteOrder()">删除订单</button>
+            <button type="button" onclick="viewComment(1)">查看评价</button>
+            <button type="button" onclick="deleteOrder(1,event)">删除订单</button>
           </div>
           <div class="order-ops">
-            <button onclick="viewLogistics()">查看物流</button>
-            <button onclick="buyAgain()">再买一单</button>
+            <button type="button" onclick="viewLogistics(1)">查看物流</button>
+            <button type="button" onclick="buyAgain(1)">再买一单</button>
           </div>
         </article>
 
