@@ -103,6 +103,7 @@ const db = new sqlite3.Database('./mydb.db', (err) => {
 });
 
 // 验证用户是否登录的中间件（放在所有接口前）
+// console.log('准备声明 checkLogin');
 const checkLogin = (req, res, next) => {
   const { user_id } = req.body || req.query; // 支持POST（body）和GET（query）
   if (!user_id) return res.json({ code: 401, msg: '请先登录' });

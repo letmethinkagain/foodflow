@@ -187,23 +187,45 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 2. 描述文字省略号优化
   const descriptions = document.querySelectorAll('.desc');
-  descriptions.forEach(desc => {
+
+  // descriptions.forEach(desc => {
+  //   if (desc.scrollHeight > desc.clientHeight) {
+  //     desc.classList.add('overflow');
+  //     desc.querySelector('::after').style.display = 'block';
+  //   }
+  // });
+
+  // // 3. 窗口变化时重新计算
+  // window.addEventListener('resize', () => {
+  //   descriptions.forEach(desc => {
+  //     if (desc.scrollHeight > desc.clientHeight) {
+  //       desc.classList.add('overflow');
+  //       desc.querySelector('::after').style.display = 'block';
+  //     } else {
+  //       desc.classList.remove('overflow');
+  //       desc.querySelector('::after').style.display = 'none';
+  //     }
+  //   });
+  // });
+
+  // 辅助函数：更新省略号显示状态
+  function updateEllipsis(desc) {
     if (desc.scrollHeight > desc.clientHeight) {
       desc.classList.add('overflow');
-      desc.querySelector('::after').style.display = 'block';
+    } else {
+      desc.classList.remove('overflow');
     }
+  }
+  
+  // 初始计算
+  descriptions.forEach(desc => {
+    updateEllipsis(desc);
   });
 
   // 3. 窗口变化时重新计算
   window.addEventListener('resize', () => {
     descriptions.forEach(desc => {
-      if (desc.scrollHeight > desc.clientHeight) {
-        desc.classList.add('overflow');
-        desc.querySelector('::after').style.display = 'block';
-      } else {
-        desc.classList.remove('overflow');
-        desc.querySelector('::after').style.display = 'none';
-      }
+      updateEllipsis(desc);
     });
   });
 });
