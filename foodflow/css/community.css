@@ -115,6 +115,7 @@ body,html{
   width: 1.5625rem;
   height: 1.5625rem;
   line-height: 1.5625rem;
+  margin-right: 0.25rem;
   border-radius: 50%;
   background-color: #999;
   overflow: hidden;

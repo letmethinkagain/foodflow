@@ -127,6 +127,7 @@ body,html{
     width: 100%; /* 图片宽度填满容器 */
     height: 100%; /* 图片高度填满容器 */
     object-fit: cover; /* 裁剪图片多余部分，保持比例填满容器 */
+    border: rgb(255, 122, 122,0.5) 0.0625rem solid;
 }
   
 .item-info {
