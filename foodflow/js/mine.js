@@ -456,6 +456,14 @@ async function renderContent(type) {
     }
   } 
   else if (type === "recipes") {
+    const publishBtn = document.createElement("button");
+    publishBtn.textContent = "发布我的食谱";
+    publishBtn.classList.add("publish-recipe-btn"); // 可用于添加样式
+    publishBtn.addEventListener("click", () => {
+      // 点击时显示弹窗示意
+      alert("跳转到发布食谱页面");
+      // 实际项目中可替换为页面跳转：window.location.href = 'publish-recipe.html';
+    });
     // 我的食谱渲染（保持原样）
     const data = [
       { id: 1, img: "carousel1.png", title: "开水炖蛋" },
@@ -487,6 +495,7 @@ async function renderContent(type) {
 
     contentDisplay.innerHTML = "";
     contentDisplay.appendChild(grid);
+    contentDisplay.appendChild(publishBtn); // 先添加发布按钮
   }
 }
 
