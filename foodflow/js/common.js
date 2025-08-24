@@ -208,53 +208,53 @@ function updateHeaderUserAction() {
   }
 
 
-    // 绑定购物车图标点击事件（通用逻辑）
-    function bindCartIconEvent() {
-        const cartIcon = document.querySelector('.cart-icon');
-        if (!cartIcon) return;
+// 绑定购物车图标点击事件（通用逻辑）
+function bindCartIconEvent() {
+    const cartIcon = document.querySelector('.cart-icon');
+    if (!cartIcon) return;
 
-        cartIcon.addEventListener('click', (e) => {
-            e.preventDefault(); // 阻止默认跳转
+    cartIcon.addEventListener('click', (e) => {
+        e.preventDefault(); // 阻止默认跳转
 
-            if (checkLogin()) {
-                // 已登录：标记跳转来源，跳转到我的页面
-                localStorage.setItem('fromCart', 'true');
-                jumpWithTip('mine.html', '前往我的购物车', 2000);
-            } else {
-                // 未登录：显示登录弹窗
-                showLoginModal();
+        if (checkLogin()) {
+            // 已登录：标记跳转来源，跳转到我的页面
+            localStorage.setItem('fromCart', 'true');
+            jumpWithTip('mine.html', '前往我的购物车', 2000);
+        } else {
+            // 未登录：显示登录弹窗
+            showLoginModal();
+        }
+    });
+}
+
+/**
+ * 激活我的页面购物车功能区
+ */
+function activateMyPageCart() {
+    // 确保在mine.html中执行
+    if (!window.location.pathname.includes('mine.html')) return;
+
+    // 等待DOM完全加载（100ms延迟确保按钮已渲染）
+    setTimeout(() => {
+        const cartBtn = document.querySelector('.func-item[data-type="cart"]');
+        if (cartBtn) {
+            cartBtn.click(); // 触发点击加载内容
+
+            // 找到按钮内的 i 元素，添加 active 类名（对应你的 CSS 置灰规则）
+            const cartIcon = cartBtn.querySelector('i');
+            if (cartIcon) {
+                cartIcon.classList.add('active');
             }
-        });
-    }
-  
-    /**
-     * 激活我的页面购物车功能区
-     */
-    function activateMyPageCart() {
-        // 确保在mine.html中执行
-        if (!window.location.pathname.includes('mine.html')) return;
 
-        // 等待DOM完全加载（100ms延迟确保按钮已渲染）
-        setTimeout(() => {
-            const cartBtn = document.querySelector('.func-item[data-type="cart"]');
-            if (cartBtn) {
-                cartBtn.click(); // 触发点击加载内容
-
-                // 找到按钮内的 i 元素，添加 active 类名（对应你的 CSS 置灰规则）
-                const cartIcon = cartBtn.querySelector('i');
-                if (cartIcon) {
-                    cartIcon.classList.add('active');
+            // 移除其他按钮 i 元素的 active 类名
+            document.querySelectorAll('.func-item i').forEach(icon => {
+                if (icon!== cartIcon) {
+                    icon.classList.remove('active');
                 }
-
-                // 移除其他按钮 i 元素的 active 类名
-                document.querySelectorAll('.func-item i').forEach(icon => {
-                    if (icon!== cartIcon) {
-                        icon.classList.remove('active');
-                    }
-                });
-            }
-        }, 100);
-    }
+            });
+        }
+    }, 100);
+}
 
 
   
